@@ -1757,7 +1757,7 @@
 									},
 									"font": "Arial;13;1",
 									"left": 640,
-									"top": 309,
+									"top": 333,
 									"width": 188.68505859375,
 									"height": 13,
 									"text": "major"
@@ -1783,7 +1783,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 645,
-											"top": 332,
+											"top": 356,
 											"width": 178.68505859375,
 											"height": 13
 										},
@@ -1798,21 +1798,21 @@
 											},
 											"font": "Arial;13;0",
 											"left": 645,
-											"top": 347,
+											"top": 371,
 											"width": 178.68505859375,
 											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 640,
-									"top": 327,
+									"top": 351,
 									"width": 188.68505859375,
 									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 640,
-							"top": 304,
+							"top": 328,
 							"width": 188.68505859375,
 							"height": 61,
 							"nameLabel": {
