@@ -19,7 +19,7 @@ namespace LoginDemo.Controllers
         {
             _context = context;
         }
-        [HttpGet]
+        [HttpPost]
         public string Login(string name, string password)
         {
             IQueryable<User> users = _context.User;
@@ -35,12 +35,20 @@ namespace LoginDemo.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet]
         public string Register(string name, string password)
         {
-            User newUser = new User(name, password);
+            IQueryable<User> users = _context.User;
+            users = users.Where(u => u.UserName == name);
+            List<User> sutiUsers = users.ToList();
+            if (sutiUsers.Count() > 0)
+            {
+                return "用户名已被注册，请重新输入";
+            }
+            User newUser = new User { UserName = name, Password = password };
             _context.User.Add(newUser);
-            return "ok";
+            _context.SaveChanges();
+            return "注册成功";
         }
     }
 }
