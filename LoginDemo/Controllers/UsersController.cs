@@ -9,7 +9,7 @@ using LoginDemo.Models;
 
 namespace LoginDemo.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
