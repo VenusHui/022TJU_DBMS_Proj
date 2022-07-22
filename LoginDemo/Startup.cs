@@ -8,8 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using LoginDemo.Models;
+
 
 namespace LoginDemo
 {
@@ -19,6 +22,12 @@ namespace LoginDemo
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddJsonOptions(cfg =>
+            {
+                cfg.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            });
+
+
             services.AddSingleton<ModelContext>();
             services.AddControllers();
 
