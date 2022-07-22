@@ -6,7 +6,7 @@
           label-position="right"
           label-width="60px"
           style="max-width: 460px"
-          class="loginForm"
+          class="LoginForm"
         >
           <el-form-item label="邮箱：">
             <el-input v-model="Email" />
@@ -17,7 +17,7 @@
 
           <el-row>
             <el-checkbox
-              class="checkBox"
+              class="CheckBox"
               v-model="isAgree"
               label="同意用户使用准则"
               name="type"
@@ -26,7 +26,7 @@
           <el-button
             v-if="isAgree"
             type="primary"
-            class="loginBtn"
+            class="LoginBtn"
             @click="login"
           >
             登录
@@ -39,7 +39,7 @@
           label-position="right"
           label-width="100px"
           style="max-width: 460px"
-          class="loginForm"
+          class="LoginForm"
         >
           <el-form-item label="邮箱：">
             <el-input v-model="rEmail" />
@@ -69,7 +69,7 @@
 
           <el-row>
             <el-checkbox
-              class="checkBox"
+              class="CheckBox"
               v-model="rAgree"
               label="同意用户使用准则"
               name="type"
@@ -78,7 +78,7 @@
           <el-button
             v-if="rAgree"
             type="primary"
-            class="loginBtn"
+            class="LoginBtn"
             @click="register"
           >
             注册
@@ -91,14 +91,15 @@
 <script lang="ts">
 import { reactive, toRefs } from "@vue/reactivity";
 import { ElMessage } from "element-plus";
+import { UserLogin,UserRegister } from "../api/user";
 export default {
   setup() {
-    const form = reactive({
+    const LoginForm = reactive({
       Email: "",
       password: "",
       isAgree: 0,
     });
-    const registerForm = reactive({
+    const RegisterForm = reactive({
       rEmail: "",
       rPassword: "",
       confirmPassword: "",
@@ -109,28 +110,26 @@ export default {
     // 方法
     // 登录
     function login() {
-      console.log(form);
+      console.log(LoginForm);
+      UserLogin(LoginForm);
     }
     // 注册
     function register() {
-      console.log("注册", registerForm);
+      console.log("注册", RegisterForm);
+      UserRegister(RegisterForm);
     }
     // 获取验证码
     function getIdentifyCode() {
       console.log("获取验证码");
     }
-    // 确认密码
-    // function confirmFunc() {
-    //   if (registerForm.confirmPassword !== registerForm.rPassword)
-    //     alert("密码与确认密码不一致");
-    // }
+
     const confirmFunc = () => {
-      if (registerForm.confirmPassword !== registerForm.rPassword)
-        ElMessage.error("密码与确认密码不一致.");
+      if (RegisterForm.confirmPassword !== RegisterForm.rPassword)
+        ElMessage.error("密码与确认密码不一致."); // alert方法也可采用
     };
     return {
-      ...toRefs(form),
-      ...toRefs(registerForm),
+      ...toRefs(LoginForm),
+      ...toRefs(RegisterForm),
       login,
       register,
       getIdentifyCode,
@@ -147,13 +146,13 @@ export default {
   top: 20%;
   width: 400px;
 }
-.loginBtn {
+.LoginBtn {
   width: 100px;
 }
-.loginForm {
+.LoginForm {
   text-align: center;
 }
-.checkBox {
+.CheckBox {
   margin-left: 7px;
 }
 .inpWidth {
