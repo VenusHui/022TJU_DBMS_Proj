@@ -19,7 +19,7 @@ ssh admin@106.14.106.243
 输入密码即可
 
 ```
-sudo docker exec -it oracle11g bash
+sudo docker exec -it oracle12c bash
 
 sqlplus
 
@@ -79,7 +79,7 @@ HELOWIN =
     (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
-      (SERVICE_NAME = helowin)  
+      (SERVICE_NAME = xe)  
     )
   )
 ```
