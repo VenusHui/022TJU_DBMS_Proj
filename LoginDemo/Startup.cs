@@ -22,7 +22,6 @@ namespace LoginDemo
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            #region CORS
             //跨域方法，先注入服务，声明策略，然后再下边app中配置开启中间件
             services.AddCors(c =>
             {
@@ -32,8 +31,6 @@ namespace LoginDemo
                     policy.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader();
                 });
             });
-
-            #endregion
 
             services.AddControllers().AddJsonOptions(cfg =>
             {
@@ -58,7 +55,7 @@ namespace LoginDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors();
+            app.UseCors("any"); // 开创！
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
