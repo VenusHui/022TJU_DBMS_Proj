@@ -2,12 +2,13 @@ import axios from 'axios'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded'
-axios.defaults.withCredentials = true
+// axios.defaults.withCredentials = true
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: '',
+    baseURL: 'https://localhost:44361/',
     timeout: 50000,
+    async: true,
     crossDomain:true,
 });
 
