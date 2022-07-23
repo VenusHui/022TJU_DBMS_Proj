@@ -20,6 +20,7 @@ namespace LoginDemo.Controllers
             _context = context;
         }
 
+        [Route("1")]
         [HttpPost]
         public IActionResult Login()
         {
@@ -47,13 +48,13 @@ namespace LoginDemo.Controllers
                 });
             }
         }
-
-        [HttpGet]
+        [Route("2")]
+        [HttpPost]
         public IActionResult Register()
         {
             IFormCollection queryParameters = HttpContext.Request.Form;
-            string name = queryParameters["Email"];
-            string password = queryParameters["password"];
+            string name = queryParameters["rEmail"];
+            string password = queryParameters["rpassword"];
 
             IQueryable<User> users = _context.User;
             users = users.Where(u => u.UserName == name);
