@@ -1,12 +1,14 @@
 import axios from 'axios'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-axios.defaults.withCredentials=true;
+axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded'
+axios.defaults.withCredentials = true
 
 // 创建axios实例
 const service = axios.create({
     baseURL: '',
     timeout: 50000,
+    crossDomain:true,
 });
 
 // response interceptor
@@ -50,6 +52,6 @@ service.interceptors.response.use(
         return Promise.reject(error)
     }
 
-    )
-    
+)
+
 export default service

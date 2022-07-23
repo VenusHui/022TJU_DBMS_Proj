@@ -16,5 +16,6 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
 
 ## Instructions
-1. Run `npm i`
-2. Run `npm run dev`
+1. Run `npm install vite`
+2. Run `npm i`
+3. Run `npm run dev`
