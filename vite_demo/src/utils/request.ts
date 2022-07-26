@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true
 // 创建axios实例
 const service = axios.create({
     baseURL: 'https://localhost:44361/',
-    timeout: 50000,
+    timeout: 5000,
     async: true,
     crossDomain:true,
 });
@@ -53,6 +53,18 @@ service.interceptors.response.use(
         return Promise.reject(error)
     }
 
+)
+
+// request interceptor
+service.interceptors.request.use(
+    config=>{
+        return config;
+    },
+    error =>{
+        console.log(error);
+        return Promise.reject(error);
+    }
+    
 )
 
 export default service
