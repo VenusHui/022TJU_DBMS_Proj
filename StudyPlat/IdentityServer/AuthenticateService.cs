@@ -22,13 +22,13 @@ namespace StudyPlat.IdentityServer
         {
             _jwtModel = tokenModel.Value;
         }
-        public bool IsAuthenticated(User request,out string token)
+        public bool IsAuthenticated(User user,out string token)
         {
             token = String.Empty;
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,request.UserName)
+                new Claim(ClaimTypes.Name,user.UserName)
             };
             //密钥
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtModel.Secret));

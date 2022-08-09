@@ -18,5 +18,6 @@ namespace StudyPlat.Controllers
         {
             return "验证成功";
         }
+
     }
 }

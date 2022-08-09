@@ -8,6 +8,6 @@ namespace StudyPlat.IdentityServer
 {
     public interface IAuthenticateService
     {
-        bool IsAuthenticated(User request, out string token);
+        bool IsAuthenticated(User user,out string token);
     }
 }

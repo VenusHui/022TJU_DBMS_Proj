@@ -22,19 +22,34 @@ namespace StudyPlat.Controllers
         private readonly ModelContext _context;
         private readonly IAuthenticateService _authenticate; 
 
-        public AuthenticateController(ModelContext context, IAuthenticateService authenticate)
+        public AuthenticateController(ModelContext context,IAuthenticateService authenticate)
         {
             _context = context;
             _authenticate = authenticate;
         }
 
         [HttpGet]
-        public string GenerateJWT(User user)
+        public string GenerateJWT()
         {
+            IFormCollection formParameter = HttpContext.Request.Form;
+            string name = formParameter["user_name"];
+            string password = formParameter["password"];
+            string phone = formParameter["phone"];
             /*
              * 跟数据库验证是不是合适的
              */
-
+            User user = new User
+            {
+                UserName = name,
+                Password = password,
+                UserId = "1",
+                UserType = true
+            };
+            
+            IQueryable<User> users = _context.User;
+            users = users.Where(u => u.PhoneNumber == phone);
+            int num = users.Count();
+            
             string token;
             if (_authenticate.IsAuthenticated(user, out token))
             {

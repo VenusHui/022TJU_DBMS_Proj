@@ -671,8 +671,8 @@ namespace StudyPlat.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNumbe)
-                    .HasColumnName("phone_numbe")
+                entity.Property(e => e.PhoneNumber)
+                    .HasColumnName("phone_number")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
