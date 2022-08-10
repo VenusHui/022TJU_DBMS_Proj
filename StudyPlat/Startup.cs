@@ -101,7 +101,7 @@ namespace StudyPlat
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudyPlat");
+                    c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "StudyPlat");
                 });
             }
 
