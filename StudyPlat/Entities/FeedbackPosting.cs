@@ -5,16 +5,14 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace StudyPlat.Entitys
+namespace StudyPlat.Entities
 {
-    public partial class CollectionCourse
+    public partial class FeedbackPosting
     {
-        public string CourseId { get; set; }
+        public string FeedbackId { get; set; }
         public string UserId { get; set; }
-        public string Note { get; set; }
-        public DateTime? CollectTime { get; set; }
 
-        public virtual Course Course { get; set; }
+        public virtual FeedbackInfo Feedback { get; set; }
         public virtual User User { get; set; }
     }
 }

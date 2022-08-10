@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace StudyPlat.Entitys
+namespace StudyPlat.Entities
 {
     public partial class User
     {
@@ -21,7 +21,7 @@ namespace StudyPlat.Entitys
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool? UserType { get; set; }
-        public string PhoneNumbe { get; set; }
+        public string PhoneNumber { get; set; }
 
         public virtual ICollection<CollectionBook> CollectionBook { get; set; }
         public virtual ICollection<CollectionCourse> CollectionCourse { get; set; }

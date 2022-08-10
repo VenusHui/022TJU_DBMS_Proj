@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace StudyPlat.Entitys
+namespace StudyPlat.Entities
 {
     public partial class ModelContext : DbContext
     {
@@ -45,7 +45,6 @@ namespace StudyPlat.Entitys
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseOracle("Data source=124.220.158.211:1521/xe;User Id=admin;Password=admin");
             }
         }
@@ -69,7 +68,7 @@ namespace StudyPlat.Entitys
                     .IsUnicode(false);
 
                 entity.Property(e => e.PhoneNumbe)
-                    .HasColumnName("phone_numbe")
+                    .HasColumnName("phone_number")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -671,8 +670,8 @@ namespace StudyPlat.Entitys
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNumbe)
-                    .HasColumnName("phone_numbe")
+                entity.Property(e => e.PhoneNumber)
+                    .HasColumnName("phone_number")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
