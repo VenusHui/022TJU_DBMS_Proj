@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using StudyPlat.Entities;
 using StudyPlat.Models;
 using StudyPlat.IdentityServer;
+using StudyPlat.Message;
 
 namespace StudyPlat.Controllers
 {
@@ -29,7 +30,7 @@ namespace StudyPlat.Controllers
             _authenticate = authenticate;
         }
 
-        [Route("1")]//注册用的获取JWT的方式
+        [Route("1")]//登录用的获取JWT的方式
         [HttpGet]
         public IActionResult LoginGenerateJWT()
         {
@@ -43,16 +44,18 @@ namespace StudyPlat.Controllers
             IQueryable<User> users = _context.User;
             users = users.Where(u => (u.PhoneNumber == phone) && (u.Password == password));
             int num = users.Count();
-            string Id = users.First().UserId;
             if( num == 0 )
                 return new JsonResult(new IdentityMessage
                 {
-                    code = 0,
-                    message = "手机号或密码有误，请查验后重试",
-                    data = new data
+                    data = new IdentityData
                     {
                         user_type = 1,
                         token = null
+                    },
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "手机号或密码有误，请查验后重试"
                     }
                 });
 
@@ -64,23 +67,29 @@ namespace StudyPlat.Controllers
             {
                 return new JsonResult(new IdentityMessage
                 {
-                    code = 0,
-                    message = "登陆成功",
-                    data = new data
+                    data = new IdentityData
                     {
                         user_type = 1,
                         token = token
+                    },
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "登陆成功"
                     }
                 });
             }
             return new JsonResult(new IdentityMessage
             {
-                code = 0,
-                message = "登陆失败，请重试",
-                data = new data
+                data = new IdentityData
                 {
                     user_type = 1,
                     token = null
+                },
+                header = new Header
+                {
+                    code = 0,
+                    message = "登陆失败，请重试"
                 }
             });
         }
@@ -106,12 +115,15 @@ namespace StudyPlat.Controllers
                 //return "该手机号已被注册，请使用一个新的手机号";
                 return new JsonResult(new IdentityMessage
                 {
-                    code = 0,
-                    message = "该手机号已被注册，请使用一个新的手机号",
-                    data = new data
+                    data = new IdentityData
                     {
                         user_type = 1,
                         token = null
+                    },
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "该手机号已被注册，请使用一个新的手机号",
                     }
                 });
             }
@@ -121,7 +133,7 @@ namespace StudyPlat.Controllers
             {
                 UserId = Id,
                 UserName = name,
-                UserType = true,
+                UserType = 1,
                 PhoneNumber = phoneNum,
                 Password = password
             };
@@ -131,27 +143,35 @@ namespace StudyPlat.Controllers
                 userModel._context.SaveChanges();
                 return new JsonResult(new IdentityMessage
                 {
-                    code = 0,
-                    message = "成功注册",
-                    data = new data
+                    data = new IdentityData
                     {
                         user_type = 1,
                         token = token
+                    },
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "成功注册",
                     }
                 });
             }
             return new JsonResult(new IdentityMessage
             {
-                code = 0,
-                message = "出现错误，无法保存新注册的用户，请再次注册",
-                data = new data
+                data = new IdentityData
                 {
                     user_type = 1,
                     token = null
+                },
+                header = new Header
+                {
+                    code = 0,
+                    message = "出现错误，无法保存新注册的用户，请再次注册",
                 }
             });
 
 
         }
+
+        
     }
 }

@@ -25,5 +25,13 @@ namespace StudyPlat.Models
             num = users.Count() + 1;
             return num.ToString();
         }
+
+        public User findUser(string id)
+        {
+            IQueryable<User> users = _context.User;
+            users = users.Where(u => u.UserId == id);
+            User user = users.First();
+            return user;
+        }
     }
 }

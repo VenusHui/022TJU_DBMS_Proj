@@ -28,7 +28,9 @@ namespace StudyPlat.IdentityServer
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,user.PhoneNumber)
+                new Claim(ClaimTypes.Name,user.PhoneNumber),
+                new Claim(ClaimTypes.NameIdentifier,user.UserId)
+
             };
             //密钥
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtModel.Secret));

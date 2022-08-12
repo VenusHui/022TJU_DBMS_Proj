@@ -10,13 +10,12 @@ namespace StudyPlat.Entities
     public partial class FeedbackInfo
     {
         public string FeedbackId { get; set; }
-        public bool? ProblemType { get; set; }
+        public byte ProblemType { get; set; }
         public string Content { get; set; }
         public DateTime PostTime { get; set; }
         public string Replay { get; set; }
-        public string QuestionId { get; set; }
+        public bool? IsFinished { get; set; }
 
-        public virtual Question Question { get; set; }
         public virtual FeedbackPosting FeedbackPosting { get; set; }
         public virtual FeedbackReception FeedbackReception { get; set; }
     }

@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyPlat.Models
+namespace StudyPlat.Message
 {
-    public class data
+    public class IdentityData
     {
         public int user_type { get; set; }
         public string token { get; set; }
     }
+
+
     public class IdentityMessage
     {
-        public int code { get; set; }
-        public string message { get; set; }
+        public IdentityData data { get; set; }
 
-        public data data { get; set; }
+        public Header header { get; set; }
     }
 }
