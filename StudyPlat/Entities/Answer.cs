@@ -17,6 +17,7 @@ namespace StudyPlat.Entities
 
         public string AnswerId { get; set; }
         public string AnswerContent { get; set; }
+        public byte[] AnswerSupplement { get; set; }
 
         public virtual ICollection<ExplainQuestion> ExplainQuestion { get; set; }
         public virtual ICollection<GiveAnswer> GiveAnswer { get; set; }

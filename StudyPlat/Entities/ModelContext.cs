@@ -103,6 +103,10 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.AnswerContent)
                     .HasColumnName("answer_content")
                     .HasColumnType("CLOB");
+
+                entity.Property(e => e.AnswerSupplement)
+                    .HasColumnName("answer_supplement")
+                    .HasColumnType("BLOB");
             });
 
             modelBuilder.Entity<Book>(entity =>
@@ -129,8 +133,7 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.Comprehension)
                     .HasColumnName("comprehension")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .HasColumnType("CLOB");
 
                 entity.Property(e => e.PicUrl)
                     .IsRequired()
@@ -140,7 +143,7 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.PublishTime)
                     .HasColumnName("publish_time")
-                    .HasColumnType("NUMBER(4)");
+                    .HasColumnType("TIMESTAMP(6)");
 
                 entity.Property(e => e.Publisher)
                     .HasColumnName("publisher")
@@ -273,8 +276,7 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.Comprehension)
                     .HasColumnName("comprehension")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                    .HasColumnType("CLOB");
 
                 entity.Property(e => e.CourseName)
                     .HasColumnName("course_name")
@@ -592,8 +594,7 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.QuestionStem)
                     .HasColumnName("question_stem")
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                    .HasColumnType("CLOB");
 
                 entity.Property(e => e.Source)
                     .HasColumnName("source")

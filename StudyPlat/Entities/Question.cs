@@ -17,11 +17,11 @@ namespace StudyPlat.Entities
         }
 
         public string QuestionId { get; set; }
-        public string QuestionStem { get; set; }
         public bool Status { get; set; }
         public string Source { get; set; }
         public DateTime PostTime { get; set; }
         public string PicUrl { get; set; }
+        public string QuestionStem { get; set; }
 
         public virtual QuestionFromBook QuestionFromBook { get; set; }
         public virtual ICollection<CollectionQuestion> CollectionQuestion { get; set; }

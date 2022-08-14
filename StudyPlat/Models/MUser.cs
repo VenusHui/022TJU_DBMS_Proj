@@ -30,7 +30,21 @@ namespace StudyPlat.Models
         {
             IQueryable<User> users = _context.User;
             users = users.Where(u => u.UserId == id);
-            User user = users.First();
+            int num = users.Count();
+            User user; 
+            if(num == 1)
+            {
+                user = users.First();
+            }
+            else
+            {
+                user = new User
+                {
+                    UserId = "-1",
+                    Password = "123456",
+                    UserType = 0
+                };
+            }
             return user;
         }
     }
