@@ -45,6 +45,7 @@ namespace StudyPlat.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseOracle("Data source=124.220.158.211:1521/xe;User Id=admin;Password=admin");
             }
         }
@@ -63,11 +64,12 @@ namespace StudyPlat.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
+                    .IsRequired()
                     .HasColumnName("password")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNumbe)
+                entity.Property(e => e.PhoneNumber)
                     .HasColumnName("phone_number")
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -77,8 +79,9 @@ namespace StudyPlat.Entities
                     .HasMaxLength(254)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SecondaryP)
-                    .HasColumnName("secondary_p")
+                entity.Property(e => e.SecondaryPassword)
+                    .IsRequired()
+                    .HasColumnName("secondary_password")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -126,6 +129,12 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.Comprehension)
                     .HasColumnName("comprehension")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PicUrl)
+                    .IsRequired()
+                    .HasColumnName("pic_url")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
@@ -375,27 +384,20 @@ namespace StudyPlat.Entities
                     .HasMaxLength(1000)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IsFinished).HasColumnName("is_finished");
+
                 entity.Property(e => e.PostTime)
                     .HasColumnName("post_time")
                     .HasColumnType("TIMESTAMP(6)");
 
-                entity.Property(e => e.ProblemType).HasColumnName("problem_type");
-
-                entity.Property(e => e.QuestionId)
-                    .HasColumnName("question_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.ProblemType)
+                    .HasColumnName("problem_type")
+                    .HasColumnType("NUMBER(4)");
 
                 entity.Property(e => e.Replay)
                     .HasColumnName("replay")
                     .HasMaxLength(1000)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.FeedbackInfo)
-                    .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("SYS_C0010352");
             });
 
             modelBuilder.Entity<FeedbackPosting>(entity =>
@@ -579,6 +581,11 @@ namespace StudyPlat.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PicUrl)
+                    .HasColumnName("pic_url")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PostTime)
                     .HasColumnName("post_time")
                     .HasColumnType("TIMESTAMP(6)");
@@ -665,7 +672,13 @@ namespace StudyPlat.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.MajorId)
+                    .HasColumnName("major_id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Password)
+                    .IsRequired()
                     .HasColumnName("password")
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -675,12 +688,19 @@ namespace StudyPlat.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SchoolName)
+                    .HasColumnName("school_name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.UserName)
                     .HasColumnName("user_name")
                     .HasMaxLength(254)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserType).HasColumnName("user_type");
+                entity.Property(e => e.UserType)
+                    .HasColumnName("user_type")
+                    .HasColumnType("NUMBER(4)");
             });
 
             OnModelCreatingPartial(modelBuilder);
