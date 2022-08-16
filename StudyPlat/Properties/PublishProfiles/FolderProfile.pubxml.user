@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>E:\Projects\StudyPlat\StudyPlat\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
+    <History>True|2022-08-16T04:52:02.2073573Z;True|2022-08-15T22:48:35.2678702+08:00;True|2022-08-15T21:11:19.6948199+08:00;True|2022-08-15T16:12:53.2391302+08:00;True|2022-08-15T15:56:49.8753423+08:00;True|2022-08-15T15:22:46.7154936+08:00;True|2022-08-15T15:22:05.0571880+08:00;True|2022-08-15T15:21:24.5763070+08:00;True|2022-08-15T15:21:08.6562504+08:00;False|2022-08-15T15:20:52.0620788+08:00;False|2022-08-15T15:20:32.4874427+08:00;True|2022-08-15T11:36:01.5081418+08:00;True|2022-08-15T11:18:12.9760669+08:00;True|2022-08-15T11:12:13.8216504+08:00;True|2022-08-13T16:33:23.4618115+08:00;True|2022-08-13T16:33:04.6370522+08:00;True|2022-08-13T16:16:33.4063471+08:00;True|2022-08-13T15:01:46.6436835+08:00;True|2022-08-13T14:53:22.0703473+08:00;True|2022-08-13T01:54:26.1473430+08:00;True|2022-08-13T01:35:36.2481112+08:00;</History>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+</Project>
