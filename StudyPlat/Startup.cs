@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using StudyPlat.Jwt;
 using StudyPlat.IdentityServer;
+using System.Reflection;
+using System.IO;
 
 namespace StudyPlat
 {
@@ -61,6 +63,10 @@ namespace StudyPlat
                     Title = "swagger",
                     Version = "v1.0"
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             //tokenµƒ≈‰÷√

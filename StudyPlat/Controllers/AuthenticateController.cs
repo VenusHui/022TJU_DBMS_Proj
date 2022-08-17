@@ -17,7 +17,7 @@ using StudyPlat.Message;
 
 namespace StudyPlat.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
@@ -29,8 +29,32 @@ namespace StudyPlat.Controllers
             _context = context;
             _authenticate = authenticate;
         }
-
-        [Route("1")]//登录用的获取JWT的方式
+        /// <summary>
+        /// 登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:user_name/password/phone_number
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "登陆成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "user_type" : 1,
+        ///             "token":""
+        ///         }
+        ///     }
+        /// 其中，user_type: 1代表用户，2代表专家，3代表管理员
+        /// code对应的情况:
+        /// 0:登陆成功
+        /// -1:手机号或密码有误
+        /// -2：其他原因导致的登陆失败
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult LoginGenerateJWT()
         {
@@ -54,7 +78,7 @@ namespace StudyPlat.Controllers
                     },
                     header = new Header
                     {
-                        code = 0,
+                        code = -1,
                         message = "手机号或密码有误，请查验后重试"
                     }
                 });
@@ -69,7 +93,7 @@ namespace StudyPlat.Controllers
                 {
                     data = new IdentityData
                     {
-                        user_type = 1,
+                        user_type = user.UserType,
                         token = token
                     },
                     header = new Header
@@ -88,14 +112,39 @@ namespace StudyPlat.Controllers
                 },
                 header = new Header
                 {
-                    code = 0,
+                    code = -2,
                     message = "登陆失败，请重试"
                 }
             });
         }
 
-        [Route("2")]
-        [HttpGet]
+        /// <summary>
+        /// 注册，注册成功后返回JWT，当前传参方式使用表单，key: user_name/password/phone_number
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        ///     
+        ///     Post/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "注册成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "user_type" : 1,
+        ///             "token":""
+        ///         }
+        ///     }
+        /// 其中，user_type: 1代表用户，2代表专家，3代表管理员
+        /// code对应的情况:
+        /// 0:登陆成功
+        /// -1:该手机号已经被注册
+        /// -2：其他原因导致的注册失败
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost]
         public IActionResult RegisterGenerateJWT()
         {
             IFormCollection formParameters = HttpContext.Request.Form;
@@ -122,7 +171,7 @@ namespace StudyPlat.Controllers
                     },
                     header = new Header
                     {
-                        code = 0,
+                        code = -1,
                         message = "该手机号已被注册，请使用一个新的手机号",
                     }
                 });
@@ -164,7 +213,7 @@ namespace StudyPlat.Controllers
                 },
                 header = new Header
                 {
-                    code = 0,
+                    code = -2,
                     message = "出现错误，无法保存新注册的用户，请再次注册",
                 }
             });
