@@ -415,7 +415,6 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("7")]
         public IActionResult QueryCourse([FromQuery] string text)
         {
             MCourse mCourse = new MCourse(_context);
