@@ -307,8 +307,9 @@ namespace StudyPlat.Controllers
         /// 通过关键字搜索题目，参数:text
         /// </summary>
         /// <remarks>
-        /// 返回搜索题目信息，返回信息示例 :
         /// IdList是一个装有相关题目ID的链表
+        /// 返回搜索题目信息，返回信息示例 :
+        /// 
         ///     Get/sample
         ///     {
         ///         "header":
@@ -353,8 +354,9 @@ namespace StudyPlat.Controllers
         /// 通过关键字搜索书籍，参数；text
         /// </summary>
         /// <remarks>
-        /// 返回搜索书籍信息，返回信息示例 :
         /// IdList是一个装有相关书籍isbn的链表
+        /// 返回搜索书籍信息，返回信息示例 :
+        /// 
         ///     Get/sample
         ///     {
         ///         "header":
@@ -393,9 +395,11 @@ namespace StudyPlat.Controllers
 
         /// <summary>
         /// 通过关键字搜索相关课程，参数:text
+        /// </summary>
         /// <remarks>
-        /// 返回搜索课程信息，返回信息示例 :
         /// IdList是一个装有相关课程id的链表
+        /// 返回搜索课程信息，返回信息示例 :
+        /// 
         ///     Get/sample
         ///     {
         ///         "header":
@@ -411,7 +415,6 @@ namespace StudyPlat.Controllers
         ///  code对应的情况:
         ///  0:获取相关课程ID成功
         /// </remarks>
-        /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]

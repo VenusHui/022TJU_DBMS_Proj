@@ -30,7 +30,7 @@ namespace StudyPlat.Controllers
             _authenticate = authenticate;
         }
         /// <summary>
-        /// 登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:user_name/password/phone_number
+        /// 登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:password/phone_number
         /// </summary>
         /// <remarks>
         /// 返回信息示例 :
@@ -59,7 +59,6 @@ namespace StudyPlat.Controllers
         public IActionResult LoginGenerateJWT()
         {
             IFormCollection formParameter = HttpContext.Request.Form;
-            string name = formParameter["user_name"];
             string password = formParameter["password"];
             string phone = formParameter["phone_number"];
             /*
