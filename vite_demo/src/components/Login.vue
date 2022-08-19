@@ -9,7 +9,7 @@
           class="LoginForm"
         >
           <el-form-item label="邮箱：">
-            <el-input v-model="Email" />
+            <el-input v-model="phone_number" />
           </el-form-item>
           <el-form-item label="密码：">
             <el-input type="password" v-model="password" />
@@ -95,7 +95,7 @@ import { UserLogin,UserRegister } from "../api/user";
 export default {
   setup() {
     const LoginForm = reactive({
-      Email: "",
+      phone_number: "",
       password: "",
       isAgree: 0,
     });

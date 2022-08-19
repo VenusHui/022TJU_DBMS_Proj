@@ -6,7 +6,7 @@ axios.defaults.withCredentials = true
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: 'https://localhost:44361/',
+    baseURL: 'http://124.220.158.211:5000/api',
     timeout: 5000,
     async: true,
     crossDomain:true,

@@ -6,7 +6,7 @@ export function UserLogin(data:any){
     console.log('data',data);
 
     return request({
-        url:'api/Users/1',
+        url:'/Authenticate/LoginGenerateJWT',
         method:'post',
         data:param
     })
