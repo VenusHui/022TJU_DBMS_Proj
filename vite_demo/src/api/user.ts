@@ -16,7 +16,7 @@ export function UserRegister(data:any){
     let param=new URLSearchParams(data);
 
     return request({
-        url:'api/Users/2',
+        url:'/Authenticate/RegisterGenerateJWT',
         method:'post',
         data:param
     })

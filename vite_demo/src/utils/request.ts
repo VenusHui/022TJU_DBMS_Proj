@@ -8,8 +8,7 @@ axios.defaults.withCredentials = true
 const service = axios.create({
     baseURL: 'http://124.220.158.211:5000/api',
     timeout: 5000,
-    async: true,
-    crossDomain:true,
+    withCredentials:true
 });
 
 // response interceptor
