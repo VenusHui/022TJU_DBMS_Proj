@@ -8,6 +8,7 @@ using StudyPlat.Entities;
 using StudyPlat.Message;
 using StudyPlat.Models;
 
+
 namespace StudyPlat.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -48,8 +49,10 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10,VaryByQueryKeys =new string[] {"question_id" })]
         public IActionResult GetQuestion(string question_id)
         {
+            
             MQuestion mQuestion = new MQuestion(_context);
             MAnswer mAnswer = new MAnswer(_context);
             Question question = mQuestion.GetQuestion(question_id);
@@ -118,6 +121,7 @@ namespace StudyPlat.Controllers
         /// <param name="answer_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration =10 , VaryByQueryKeys = new string[] { "answer_id"})]
         public IActionResult GetAnswer([FromQuery]string answer_id )
         {
             MAnswer mAnswer = new MAnswer(_context);
@@ -188,6 +192,7 @@ namespace StudyPlat.Controllers
         /// <param name="isbn"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10,VaryByQueryKeys =new string[] { "isbn"})]
         public IActionResult GetBook([FromQuery]string isbn)
         {
             MBook mBook = new MBook(_context);

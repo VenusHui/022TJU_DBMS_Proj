@@ -41,7 +41,10 @@ namespace StudyPlat
             {
                 c.AddPolicy("any", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader();
+                    policy.AllowAnyMethod()
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyHeader()
+                    .AllowCredentials();
                 });
             });
 
@@ -50,7 +53,7 @@ namespace StudyPlat
                 cfg.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             });
 
-
+            services.AddResponseCaching();
             services.AddSingleton<ModelContext>();
             services.AddControllers();
 
@@ -100,7 +103,6 @@ namespace StudyPlat
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors("any");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -119,6 +121,20 @@ namespace StudyPlat
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("any");
+            app.UseResponseCaching();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromSeconds(10)
+                };
+                await next();
+            });
 
             app.UseEndpoints(endpoints =>
             {

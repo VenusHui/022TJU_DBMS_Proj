@@ -19,6 +19,22 @@ namespace StudyPlat.Models
             _context = context;
         }
 
+        public int AddBook(Book book)
+        {
+            string isbn = book.Isbn;
+            int num = this.CheckBook(isbn);
+            if(num >= 1 )
+            {
+                return -1;//说明已经有这本书了
+            }
+            else
+            {
+                _context.Add(book);
+                _context.SaveChanges();
+                return 0;//说明成功保存
+            }
+        }
+
         public Book GetBook(string isbn)
         {
             IQueryable<Book> books = _context.Book;
@@ -44,12 +60,12 @@ namespace StudyPlat.Models
         {
             IQueryable<Book> books = _context.Book;
             books = books.Where(u => u.BookName.Contains(key));
-            List<string> bookIdList = new List<string> { };
-            Book[] booksArray = books.ToArray();
             int num = books.Count();
+            List<string> bookIdList = new List<string> { };
+            List<Book> booksList = books.ToList(); 
             for(int i =0;i < num; i++ )
             {
-                bookIdList.Add(booksArray[i].Isbn);
+                bookIdList.Add(booksList[i].Isbn);
             }
             return bookIdList;
         }

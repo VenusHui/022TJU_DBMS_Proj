@@ -13,11 +13,9 @@ namespace StudyPlat.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
         public string test()
         {
             return "验证成功";
         }
-
     }
 }

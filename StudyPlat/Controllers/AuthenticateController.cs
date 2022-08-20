@@ -55,7 +55,7 @@ namespace StudyPlat.Controllers
         /// -2：其他原因导致的登陆失败
         /// </remarks>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IActionResult LoginGenerateJWT()
         {
             IFormCollection formParameter = HttpContext.Request.Form;
@@ -141,12 +141,13 @@ namespace StudyPlat.Controllers
         /// 0:登陆成功
         /// -1:该手机号已经被注册
         /// -2：其他原因导致的注册失败
+        /// -3：信息填写不全面，注册失败，请检查
         /// </remarks>
         /// <returns></returns>
         [HttpPost]
         public IActionResult RegisterGenerateJWT()
         {
-            IFormCollection formParameters = HttpContext.Request.Form;
+            IFormCollection formParameters = HttpContext.Request.Form; 
             string name = formParameters["user_name"];
             string password = formParameters["password"];
             string phoneNum = formParameters["phone_number"];
@@ -172,6 +173,22 @@ namespace StudyPlat.Controllers
                     {
                         code = -1,
                         message = "该手机号已被注册，请使用一个新的手机号",
+                    }
+                });
+            }
+            if(name == null || password == null || phoneNum == null)
+            {
+                return new JsonResult(new IdentityMessage
+                {
+                    data = new IdentityData
+                    {
+                        user_type = 1,
+                        token = null
+                    },
+                    header = new Header
+                    {
+                        code = -3,
+                        message = "信息填写不全面，注册失败，请检查",
                     }
                 });
             }
@@ -216,10 +233,6 @@ namespace StudyPlat.Controllers
                     message = "出现错误，无法保存新注册的用户，请再次注册",
                 }
             });
-
-
         }
-
-        
     }
 }
