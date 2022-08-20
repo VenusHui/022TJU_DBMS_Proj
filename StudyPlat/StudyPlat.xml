@@ -6,22 +6,23 @@
     <members>
         <member name="M:StudyPlat.Controllers.AuthenticateController.LoginGenerateJWT">
             <summary>
-            登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:user_name/password/phone_number
+            登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:password/phone_number
             </summary>
             <remarks>
             返回信息示例 :
                 
-                Get/sample
+                Post/sample
                 {
                     "header":
                     {
                         "code" : 0,
                         "message" : "登陆成功"
                     },
-                    "data":
+                    "token" : asdsadad.adasdad.asdasdas,
+                    "user":
                     {
                         "user_type" : 1,
-                        "token":""
+                        "user_id":"1"
                     }
                 }
             其中，user_type: 1代表用户，2代表专家，3代表管理员
@@ -46,17 +47,18 @@
                         "code" : 0,
                         "message" : "注册成功"
                     },
-                    "data":
+                    "token" : null,
+                    "user":
                     {
                         "user_type" : 1,
-                        "token":""
+                        "user_id":"1"
                     }
                 }
             其中，user_type: 1代表用户，2代表专家，3代表管理员
             code对应的情况:
             0:登陆成功
             -1:该手机号已经被注册
-            -2：其他原因导致的注册失败
+            -2：信息填写不全面，注册失败，请检查
             </remarks>
             <returns></returns>
         </member>
@@ -278,6 +280,26 @@
             <param name="course_id"></param>
             <returns></returns>
         </member>
+        <member name="M:StudyPlat.Controllers.DataController.AddBook">
+            <summary>
+            用于添加Book的api，以表单形式传参
+            key:isbn/book_name/author/publisher/year/month/day/comprehension/pic_url
+            </summary>
+            <remarks>
+            返回信息示例 :
+            
+                Post/Sample
+                {
+                    "code" : 0,
+                    "message" : "保存成功"
+                }
+                
+            code对应情况:
+            0:保存成功
+            -1:isbn码出现重复，请检查数据库内是否已经录入相关内容
+            -2:isbn码/bookName/picUrl未填写，请完善后再次尝试录入书本信息
+            </remarks>
+        </member>
         <member name="M:StudyPlat.Controllers.PersonalController.GetPersonalInformation(System.String)">
             <summary>
             根据用户ID来获取用户的个人信息，用于个人信息页面，参数:user_id
@@ -458,8 +480,9 @@
             通过关键字搜索题目，参数:text
             </summary>
             <remarks>
-            返回搜索题目信息，返回信息示例 :
             IdList是一个装有相关题目ID的链表
+            返回搜索题目信息，返回信息示例 :
+            
                 Get/sample
                 {
                     "header":
@@ -483,8 +506,9 @@
             通过关键字搜索书籍，参数；text
             </summary>
             <remarks>
-            返回搜索书籍信息，返回信息示例 :
             IdList是一个装有相关书籍isbn的链表
+            返回搜索书籍信息，返回信息示例 :
+            
                 Get/sample
                 {
                     "header":
@@ -506,9 +530,11 @@
         <member name="M:StudyPlat.Controllers.QueryController.QueryCourse(System.String)">
             <summary>
             通过关键字搜索相关课程，参数:text
+            </summary>
             <remarks>
-            返回搜索课程信息，返回信息示例 :
             IdList是一个装有相关课程id的链表
+            返回搜索课程信息，返回信息示例 :
+            
                 Get/sample
                 {
                     "header":
@@ -524,7 +550,6 @@
              code对应的情况:
              0:获取相关课程ID成功
             </remarks>
-            </summary>
             <param name="text"></param>
             <returns></returns>
         </member>

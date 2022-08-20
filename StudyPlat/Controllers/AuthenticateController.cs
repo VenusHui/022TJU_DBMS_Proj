@@ -35,17 +35,18 @@ namespace StudyPlat.Controllers
         /// <remarks>
         /// 返回信息示例 :
         ///     
-        ///     Get/sample
+        ///     Post/sample
         ///     {
         ///         "header":
         ///         {
         ///             "code" : 0,
         ///             "message" : "登陆成功"
         ///         },
-        ///         "data":
+        ///         "token" : asdsadad.adasdad.asdasdas,
+        ///         "user":
         ///         {
         ///             "user_type" : 1,
-        ///             "token":""
+        ///             "user_id":"1"
         ///         }
         ///     }
         /// 其中，user_type: 1代表用户，2代表专家，3代表管理员
@@ -72,7 +73,7 @@ namespace StudyPlat.Controllers
                 {
                     data = new IdentityData
                     {
-                        user_type = 1,
+                        user = new UserInfo { user_type = 1, user_id = "-1" },
                         token = null
                     },
                     header = new Header
@@ -92,7 +93,11 @@ namespace StudyPlat.Controllers
                 {
                     data = new IdentityData
                     {
-                        user_type = user.UserType,
+                        user = new UserInfo
+                        {
+                            user_type = user.UserType,
+                            user_id = user.UserId
+                        },
                         token = token
                     },
                     header = new Header
@@ -106,7 +111,11 @@ namespace StudyPlat.Controllers
             {
                 data = new IdentityData
                 {
-                    user_type = 1,
+                    user = new UserInfo
+                    {
+                        user_type = 1,
+                        user_id = "-1"
+                    },
                     token = null
                 },
                 header = new Header
@@ -130,18 +139,18 @@ namespace StudyPlat.Controllers
         ///             "code" : 0,
         ///             "message" : "注册成功"
         ///         },
-        ///         "data":
+        ///         "token" : null,
+        ///         "user":
         ///         {
         ///             "user_type" : 1,
-        ///             "token":""
+        ///             "user_id":"1"
         ///         }
         ///     }
         /// 其中，user_type: 1代表用户，2代表专家，3代表管理员
         /// code对应的情况:
         /// 0:登陆成功
         /// -1:该手机号已经被注册
-        /// -2：其他原因导致的注册失败
-        /// -3：信息填写不全面，注册失败，请检查
+        /// -2：信息填写不全面，注册失败，请检查
         /// </remarks>
         /// <returns></returns>
         [HttpPost]
@@ -151,7 +160,6 @@ namespace StudyPlat.Controllers
             string name = formParameters["user_name"];
             string password = formParameters["password"];
             string phoneNum = formParameters["phone_number"];
-            string token;
 
             MUser userModel = new MUser(_context);
 
@@ -166,7 +174,11 @@ namespace StudyPlat.Controllers
                 {
                     data = new IdentityData
                     {
-                        user_type = 1,
+                        user = new UserInfo
+                        {
+                            user_type = 1,
+                            user_id = "-1"
+                        },
                         token = null
                     },
                     header = new Header
@@ -182,12 +194,16 @@ namespace StudyPlat.Controllers
                 {
                     data = new IdentityData
                     {
-                        user_type = 1,
+                        user = new UserInfo
+                        {
+                            user_type = 1,
+                            user_id = "-1",
+                        },
                         token = null
                     },
                     header = new Header
                     {
-                        code = -3,
+                        code = -2,
                         message = "信息填写不全面，注册失败，请检查",
                     }
                 });
@@ -202,35 +218,23 @@ namespace StudyPlat.Controllers
                 PhoneNumber = phoneNum,
                 Password = password
             };
-            if (_authenticate.IsAuthenticated(newUser, out token))
-            {
-                userModel._context.Add(newUser);
-                userModel._context.SaveChanges();
-                return new JsonResult(new IdentityMessage
-                {
-                    data = new IdentityData
-                    {
-                        user_type = 1,
-                        token = token
-                    },
-                    header = new Header
-                    {
-                        code = 0,
-                        message = "成功注册",
-                    }
-                });
-            }
+            userModel._context.Add(newUser);
+            userModel._context.SaveChanges();
             return new JsonResult(new IdentityMessage
             {
                 data = new IdentityData
                 {
-                    user_type = 1,
-                    token = null
+                    user = new UserInfo
+                    {
+                        user_type = 1,
+                        user_id = newUser.UserId,
+                    },
+                    token =null
                 },
                 header = new Header
                 {
-                    code = -2,
-                    message = "出现错误，无法保存新注册的用户，请再次注册",
+                    code = 0,
+                    message = "成功注册",
                 }
             });
         }
