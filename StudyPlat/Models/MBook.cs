@@ -19,29 +19,59 @@ namespace StudyPlat.Models
             _context = context;
         }
 
-        public int AddBook(Book book)
+        public int AddBook(Book book,string course_name)
         {
             string isbn = book.Isbn;
+            MCourse mCourse = new MCourse(_context);
+            string course_id = mCourse.FindCourse(course_name);
+            if(course_id == "-1" || course_id == "-2")
+            {
+                return -2;//说明course_name不合适
+            }
+            HasBook hasBooks1 = new HasBook
+            {
+                CourseId = course_id,
+                Isbn = book.Isbn,
+                AdditionDate = DateTime.Now
+            };
             int num = this.CheckBook(isbn);
-            if(num >= 1 )
+            if (num >= 1)
             {
                 return -1;//说明已经有这本书了
             }
             else
             {
+                _context.Add(hasBooks1);
                 _context.Add(book);
                 _context.SaveChanges();
                 return 0;//说明成功保存
             }
         }
-
+        public string FindBook(string book_name)
+        {
+            IQueryable<Book> books = _context.Book;
+            books = books.Where(u => u.BookName == book_name);
+            int num = books.Count();
+            if(num == 1)
+            {
+                return books.First().Isbn;
+            }
+            else if(num > 1)
+            {
+                return "-2";//有重复，检查数据库
+            }
+            else
+            {
+                return "-1";//没找到对应的书
+            }
+        }
         public Book GetBook(string isbn)
         {
             IQueryable<Book> books = _context.Book;
             books = books.Where(u => u.Isbn == isbn);
             Book book;
             int num = books.Count();
-            if(num == 1)
+            if (num == 1)
             {
                 book = books.First();
             }
@@ -62,8 +92,8 @@ namespace StudyPlat.Models
             books = books.Where(u => u.BookName.Contains(key));
             int num = books.Count();
             List<string> bookIdList = new List<string> { };
-            List<Book> booksList = books.ToList(); 
-            for(int i =0;i < num; i++ )
+            List<Book> booksList = books.ToList();
+            for (int i = 0; i < num; i++)
             {
                 bookIdList.Add(booksList[i].Isbn);
             }
@@ -79,7 +109,7 @@ namespace StudyPlat.Models
             int num = collectionBooks.Count();
             CollectionBook[] bookArray = new CollectionBook[50];
             bookArray = collectionBooks.ToArray();
-            for(int i = 0;i < num; i++)
+            for (int i = 0; i < num; i++)
             {
                 idArray[i] = bookArray[i].Isbn;
             }
@@ -100,18 +130,18 @@ namespace StudyPlat.Models
             IQueryable<CollectionBook> isRepeat;
             collectionBooks = collectionBooks.Where(u => u.UserId == user_id);
             int valid = this.CheckBook(isbn);
-            if(valid == 0)
+            if (valid == 0)
             {
                 return -2; //代表在书籍表中不存在相应的书
             }
             isRepeat = collectionBooks.Where(u => u.Isbn == isbn);
             int repeat = isRepeat.Count();
-            if(repeat > 0)
+            if (repeat > 0)
             {
                 return 1;//说明收藏过了
             }
             int num = collectionBooks.Count();
-            if(num < 50 )
+            if (num < 50)
             {
                 CollectionBook collect = new CollectionBook
                 {
@@ -134,7 +164,7 @@ namespace StudyPlat.Models
             IQueryable<CollectionBook> collectionBooks = _context.CollectionBook;
             collectionBooks = collectionBooks.Where(u => u.UserId == user_id && u.Isbn == isbn);
             int num = collectionBooks.Count();
-            if( num == 1 )
+            if (num == 1)
             {
                 CollectionBook entity = collectionBooks.First();
                 _context.Remove(entity);

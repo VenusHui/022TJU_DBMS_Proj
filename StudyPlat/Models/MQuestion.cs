@@ -20,6 +20,11 @@ namespace StudyPlat.Models
             QuestionFromCourse = new HashSet<QuestionFromCourse>();
         }
 
+        public string GenerateId()
+        {
+            IQueryable<Question> questions = _context.Question;
+            return (questions.Count() + 1).ToString();
+        }
         public Question GetQuestion(string question_id)
         {
             IQueryable<Question> questions = _context.Question;
@@ -141,5 +146,45 @@ namespace StudyPlat.Models
             }
         }
         
+        public int AddQuestion(Question question,string book_name,string course_name)
+        {
+            string question_id = question.QuestionId;
+            MBook mBook = new MBook(_context);
+            MCourse mCourse = new MCourse(_context);
+            string isbn = mBook.FindBook(book_name);
+            string course_id = mCourse.FindCourse(course_name);
+            if(isbn =="-1" || isbn =="-2")
+            {
+                return -2; //书名有问题
+            }
+            if(course_id == "-1" || course_id == "-2")
+            {
+                return -3;//课程名有问题
+            }
+            QuestionFromBook questionFromBook = new QuestionFromBook
+            {
+                QuestionId = question.QuestionId,
+                Isbn = isbn
+            };
+            QuestionFromCourse questionFromCourses = new QuestionFromCourse
+            {
+                QuestionId = question.QuestionId,
+                CourseId = course_id
+            };
+            int num = this.CheckQuestion(question_id);
+            if(num >= 1)
+            {
+                return -1;//说明已经有这个题目了，相应的question_id
+            }
+            else
+            {
+                _context.Add(questionFromBook);
+                _context.Add(questionFromCourses);
+                _context.Add(question);
+                _context.SaveChanges();
+                return 0;
+            }
+        }
+
     }
 }

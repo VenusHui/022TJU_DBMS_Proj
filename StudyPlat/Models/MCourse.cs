@@ -18,6 +18,11 @@ namespace StudyPlat.Models
             _context = context;
         }
 
+        public string GenerateId()
+        {
+            IQueryable<Course> courses = _context.Course;
+            return (courses.Count() + 1).ToString();
+        }
         public Course GetCourse(string course_id)
         {
             IQueryable<Course> courses = _context.Course;
@@ -38,6 +43,24 @@ namespace StudyPlat.Models
             return course;
         }
 
+        public string FindCourse(string course_name)
+        {
+            IQueryable<Course> courses = _context.Course;
+            courses = courses.Where(u => u.CourseName == course_name);
+            if(courses.Count() == 1)
+            {
+                return courses.First().CourseId;
+            }
+            else if(courses.Count()>1)
+            {
+                return "-2";//一个course_name对应了两个id'，请检查数据库
+            }
+            else
+            {
+                return "-1";//没有相应的课程
+            }
+        }
+        
         public List<string> QueryCourse(string key)
         {
             IQueryable<Course> courses = _context.Course;
@@ -143,5 +166,11 @@ namespace StudyPlat.Models
                 return -1;
             }
         }
+        /*
+        public int AddCourse(Course course,string major_name)
+        {
+            MMajor mMajor = new MMajor(_context);
+            string major_id = mMajor.FindMajor(major_name);
+        }*/
     }
 }

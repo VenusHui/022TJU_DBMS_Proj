@@ -300,6 +300,27 @@
             -2:isbn码/bookName/picUrl未填写，请完善后再次尝试录入书本信息
             </remarks>
         </member>
+        <member name="M:StudyPlat.Controllers.DataController.AddQuestion">
+            <summary>
+            用于添加题目的api，用表单来传参
+            key:question_stem/pic_url/course_name/book_name
+            </summary>
+            <remarks>
+            返回信息示例 :
+            
+                Post/Sample
+                {
+                    "code" : 0,
+                    "message" : "保存成功"
+                }
+                
+            code对应情况:
+            0:保存成功
+            -1:question_id出现重复，请检查数据库后再试
+            -2:输入的书籍名称有误，请检查数据库后再试
+            -3:输入的课程名称有误，请检查数据库后再试
+            </remarks>
+        </member>
         <member name="M:StudyPlat.Controllers.PersonalController.GetPersonalInformation(System.String)">
             <summary>
             根据用户ID来获取用户的个人信息，用于个人信息页面，参数:user_id
@@ -377,6 +398,7 @@
                     {
                         "pic_url" : "http//:",
                         "answer_id_list": [""]
+                        "question_stem":"题干信息"
                     }
                 }
              code对应的情况:
@@ -466,6 +488,7 @@
                         "course_id" : "12346",
                         "comprehension": "有关计算机硬件的一门课",
                         "course_name" :"计算机系统结构",
+                        "pic_url" : "https://"
                     }
                 }
              code对应的情况:

@@ -16,7 +16,7 @@ namespace StudyPlat.Controllers
     public class QueryController : ControllerBase
     {
         private readonly ModelContext _context;
-
+        private static object obj = new object();
         public QueryController(ModelContext context)
         {
             _context = context;
@@ -40,6 +40,7 @@ namespace StudyPlat.Controllers
         ///         {
         ///             "pic_url" : "http//:",
         ///             "answer_id_list": [""]
+        ///             "question_stem":"题干信息"
         ///         }
         ///     }
         ///  code对应的情况:
@@ -49,48 +50,50 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10,VaryByQueryKeys =new string[] {"question_id" })]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id" })]
         public IActionResult GetQuestion(string question_id)
         {
-            
-            MQuestion mQuestion = new MQuestion(_context);
-            MAnswer mAnswer = new MAnswer(_context);
-            Question question = mQuestion.GetQuestion(question_id);
-            //如果出现-1的id说明出现了错误
-            if(question.QuestionId == "-1")
+            lock(obj)
             {
+                MQuestion mQuestion = new MQuestion(_context);
+                MAnswer mAnswer = new MAnswer(_context);
+                Question question = mQuestion.GetQuestion(question_id);
+                //如果出现-1的id说明出现了错误
+                if (question.QuestionId == "-1")
+                {
+                    return new JsonResult(new QuestionMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "没有相应的题目信息,请检查ID是否出错"
+                        },
+                        data = new QuestionData
+                        {
+                            pic_url = "",
+                            answer_id_list = new string[50]
+                        }
+                    });
+                }
+                string Qid = question.QuestionId;
+                string[] answerIdArray = new string[5];
+                answerIdArray = mAnswer.GetAnswerIdArray(Qid);
+
                 return new JsonResult(new QuestionMessage
                 {
                     header = new Header
                     {
-                        code = -1,
-                        message = "没有相应的题目信息,请检查ID是否出错"
+                        code = 0,
+                        message = "获取题目信息成功"
                     },
                     data = new QuestionData
                     {
-                        pic_url = "",
-                        answer_id_list = new string[50]
+                        question_stem = question.QuestionStem,
+                        pic_url = question.PicUrl,
+                        answer_id_list = answerIdArray
                     }
                 });
             }
-            string Qid = question.QuestionId;
-            string[] answerIdArray = new string[5];
-            answerIdArray = mAnswer.GetAnswerIdArray(Qid);
-
-            return new JsonResult(new QuestionMessage
-            {
-                header = new Header
-                {
-                    code = 0,
-                    message = "获取题目信息成功"
-                },
-                data = new QuestionData
-                {
-                    pic_url = question.PicUrl,
-                    answer_id_list = answerIdArray
-                }
-            });
-            
         }
 
         /// <summary>
@@ -121,43 +124,46 @@ namespace StudyPlat.Controllers
         /// <param name="answer_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration =10 , VaryByQueryKeys = new string[] { "answer_id"})]
-        public IActionResult GetAnswer([FromQuery]string answer_id )
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "answer_id" })]
+        public IActionResult GetAnswer([FromQuery] string answer_id)
         {
-            MAnswer mAnswer = new MAnswer(_context);
-            Answer answer = mAnswer.GetAnswer(answer_id);
-            //查找失败
-            if (answer.AnswerId == "-1")
+            lock(obj)
             {
-                return new JsonResult(new AnswerMessage
+                MAnswer mAnswer = new MAnswer(_context);
+                Answer answer = mAnswer.GetAnswer(answer_id);
+                //查找失败
+                if (answer.AnswerId == "-1")
                 {
-                    header = new Header
+                    return new JsonResult(new AnswerMessage
                     {
-                        code = -1,
-                        message = "没有相应的答案信息，请检查ID是否出错"
-                    },
-                    data = new AnswerData
-                    {
-                        answer_content = "-1",
-                        answer_id = "-1"
-                    }
-                });
-            }
-            else
-            {
-                return new JsonResult(new AnswerMessage
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "没有相应的答案信息，请检查ID是否出错"
+                        },
+                        data = new AnswerData
+                        {
+                            answer_content = "-1",
+                            answer_id = "-1"
+                        }
+                    });
+                }
+                else
                 {
-                    header = new Header
+                    return new JsonResult(new AnswerMessage
                     {
-                        code = 0,
-                        message = "根据答案id获取答案信息成功"
-                    },
-                    data = new AnswerData
-                    {
-                        answer_content = answer.AnswerContent,
-                        answer_id = answer.AnswerId
-                    }
-                });
+                        header = new Header
+                        {
+                            code = 0,
+                            message = "根据答案id获取答案信息成功"
+                        },
+                        data = new AnswerData
+                        {
+                            answer_content = answer.AnswerContent,
+                            answer_id = answer.AnswerId
+                        }
+                    });
+                }
             }
         }
 
@@ -192,52 +198,55 @@ namespace StudyPlat.Controllers
         /// <param name="isbn"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10,VaryByQueryKeys =new string[] { "isbn"})]
-        public IActionResult GetBook([FromQuery]string isbn)
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "isbn" })]
+        public IActionResult GetBook([FromQuery] string isbn)
         {
-            MBook mBook = new MBook(_context);
-            Book book = mBook.GetBook(isbn);
-            if(book.Isbn == "-1")
+            lock(obj)
             {
-                return new JsonResult(new BookMessage
+                MBook mBook = new MBook(_context);
+                Book book = mBook.GetBook(isbn);
+                if (book.Isbn == "-1")
                 {
-                    header = new Header
+                    return new JsonResult(new BookMessage
                     {
-                        code = -1,
-                        message = "没有相应的书本信息，请检查Isbn是否出错"
-                    },
-                    data = new BookData
-                    {
-                        isbn = "-1",
-                        book_name = "-1",
-                        author = "-1",
-                        publish_time = DateTime.Now,
-                        publisher = "-1",
-                        comprehension = "-1",
-                        pic_url = "-1"
-                    }
-                });
-            }
-            else
-            {
-                return new JsonResult(new BookMessage
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "没有相应的书本信息，请检查Isbn是否出错"
+                        },
+                        data = new BookData
+                        {
+                            isbn = "-1",
+                            book_name = "-1",
+                            author = "-1",
+                            publish_time = DateTime.Now,
+                            publisher = "-1",
+                            comprehension = "-1",
+                            pic_url = "-1"
+                        }
+                    });
+                }
+                else
                 {
-                    header = new Header
+                    return new JsonResult(new BookMessage
                     {
-                        code = 0,
-                        message = "根据书本id获取书本信息成功"
-                    },
-                    data = new BookData
-                    {
-                        isbn = book.Isbn,
-                        book_name = book.BookName,
-                        author = book.Author,
-                        publish_time = book.PublishTime,
-                        publisher = book.Publisher,
-                        comprehension = book.Comprehension,
-                        pic_url = book.PicUrl
-                    }
-                });
+                        header = new Header
+                        {
+                            code = 0,
+                            message = "根据书本id获取书本信息成功"
+                        },
+                        data = new BookData
+                        {
+                            isbn = book.Isbn,
+                            book_name = book.BookName,
+                            author = book.Author,
+                            publish_time = book.PublishTime,
+                            publisher = book.Publisher,
+                            comprehension = book.Comprehension,
+                            pic_url = book.PicUrl
+                        }
+                    });
+                }
             }
         }
 
@@ -259,6 +268,7 @@ namespace StudyPlat.Controllers
         ///             "course_id" : "12346",
         ///             "comprehension": "有关计算机硬件的一门课",
         ///             "course_name" :"计算机系统结构",
+        ///             "pic_url" : "https://"
         ///         }
         ///     }
         ///  code对应的情况:
@@ -268,43 +278,48 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetCourse([FromQuery]string course_id)
+        [ResponseCache(Duration =10 , VaryByQueryKeys =new string[] { "course_id"})]
+        public IActionResult GetCourse([FromQuery] string course_id)
         {
-            MCourse mCourse = new MCourse(_context);
-            Course course = mCourse.GetCourse(course_id);
-            if(course.CourseId == "-1")
+            lock(obj)
             {
-                return new JsonResult(new CourseMessage
+                MCourse mCourse = new MCourse(_context);
+                Course course = mCourse.GetCourse(course_id);
+                if (course.CourseId == "-1")
                 {
-                    header = new Header
+                    return new JsonResult(new CourseMessage
                     {
-                        code = -1,
-                        message = "没有相应的课程信息，请检查课程ID是否出错"
-                    },
-                    data = new CourseData
-                    {
-                        course_id = "-1",
-                        comprehension = "-1",
-                        course_name = "-1"
-                    }
-                });
-            }
-            else
-            {
-                return new JsonResult(new CourseMessage
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "没有相应的课程信息，请检查课程ID是否出错"
+                        },
+                        data = new CourseData
+                        {
+                            course_id = "-1",
+                            comprehension = "-1",
+                            course_name = "-1"
+                        }
+                    });
+                }
+                else
                 {
-                    header = new Header
+                    return new JsonResult(new CourseMessage
                     {
-                        code = 0,
-                        message = "根据课程id获取课程信息成功"
-                    },
-                    data = new CourseData
-                    {
-                        course_id = course_id,
-                        comprehension = course.Comprehension,
-                        course_name = course.CourseName
-                    }
-                });
+                        header = new Header
+                        {
+                            code = 0,
+                            message = "根据课程id获取课程信息成功"
+                        },
+                        data = new CourseData
+                        {
+                            course_id = course_id,
+                            comprehension = course.Comprehension,
+                            course_name = course.CourseName,
+                            pic_url = course.PicUrl
+                        }
+                    });
+                }
             }
         }
 
@@ -333,25 +348,28 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult QueryQuestion([FromQuery]string text)
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] {"text" })]
+        public IActionResult QueryQuestion([FromQuery] string text)
         {
             //查找的结果为所有可能对应的题目的id
-
-            MQuestion mQuestion = new MQuestion(_context);
-            List<string> questionList = mQuestion.QueryQuestion(text);
-
-            return new JsonResult(new QueryMessage
+            lock(obj)
             {
-                header = new Header
+                MQuestion mQuestion = new MQuestion(_context);
+                List<string> questionList = mQuestion.QueryQuestion(text);
+
+                return new JsonResult(new QueryMessage
                 {
-                    code = 0,
-                    message = "获取相关题目ID成功"
-                },
-                data = new QueryData
-                {
-                    IdList = questionList
-                }
-            });
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取相关题目ID成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = questionList
+                    }
+                });
+            }
         }
 
 
@@ -380,22 +398,26 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys =new string[]{"text"})]
         public IActionResult QueryBook([FromQuery] string text)
         {
-            MBook mBook = new MBook(_context);
-            List<string> bookList = mBook.QueryBook(text);
-            return new JsonResult(new QueryMessage
+            lock(obj)
             {
-                header = new Header
+                MBook mBook = new MBook(_context);
+                List<string> bookList = mBook.QueryBook(text);
+                return new JsonResult(new QueryMessage
                 {
-                    code = 0,
-                    message = "获取相关书籍isbn码成功"
-                },
-                data = new QueryData
-                {
-                    IdList = bookList
-                }
-            });
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取相关书籍isbn码成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = bookList
+                    }
+                });
+            }
         }
 
         /// <summary>
@@ -423,22 +445,26 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10 , VaryByQueryKeys = new string[] { "text"})]
         public IActionResult QueryCourse([FromQuery] string text)
         {
-            MCourse mCourse = new MCourse(_context);
-            List<string> IdList = mCourse.QueryCourse(text);
-            return new JsonResult(new QueryMessage
+            lock(obj)
             {
-                header = new Header
+                MCourse mCourse = new MCourse(_context);
+                List<string> IdList = mCourse.QueryCourse(text);
+                return new JsonResult(new QueryMessage
                 {
-                    code = 0,
-                    message = "获取相关课程ID成功"
-                },
-                data = new QueryData
-                {
-                    IdList = IdList
-                }
-            });
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取相关课程ID成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = IdList
+                    }
+                });
+            }
         }
     }
 }

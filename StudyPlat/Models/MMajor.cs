@@ -36,5 +36,23 @@ namespace StudyPlat.Models
                 };
             }
         }
+
+        public string FindMajor(string major_name)
+        {
+            IQueryable<Major> majors = _context.Major;
+            majors = majors.Where(u => u.MajorName == major_name);
+            if(majors.Count() == 1)
+            {
+                return majors.First().MajorName;
+            }
+            else if (majors.Count() > 1)
+            {
+                return "-2"; //出现一个major_Name对应两个major_id的情况，请检查数据库
+            }
+            else
+            {
+                return "-1";//说明没有相应的major_id
+            }
+        }
     }
 }

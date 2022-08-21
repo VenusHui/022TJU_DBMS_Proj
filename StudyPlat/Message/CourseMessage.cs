@@ -11,6 +11,7 @@ namespace StudyPlat.Message
         public string course_id { get; set; }
         public string course_name { get; set; }
         public string comprehension { get; set; }
+        public string pic_url { get; set; }
     }
     public class CourseMessage
     {
