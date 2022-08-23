@@ -54,5 +54,12 @@ namespace StudyPlat.Models
                 return "-1";//说明没有相应的major_id
             }
         }
+
+        public string GetMajorIDFromExpertID(string expert_id)
+        {
+            IQueryable<HasExpert> hasExperts = _context.HasExpert;
+            hasExperts = hasExperts.Where(u => u.ExpertId == expert_id);
+            return hasExperts.First().MajorId;
+        }
     }
 }

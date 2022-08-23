@@ -74,6 +74,31 @@ namespace StudyPlat.Models
             }
             return courseIdList;
         }
+
+        public List<string> QueryCourseCollection(string user_id,string text)
+        {
+            IQueryable<CollectionCourse> collectionCourses = _context.CollectionCourse;
+            IQueryable<Course> courses = _context.Course;
+            collectionCourses = collectionCourses.Where(u => u.UserId == user_id);
+            int num = collectionCourses.Count();
+            List<CollectionCourse> collectionCourses1 = collectionCourses.ToList();
+            List<string> courseIDList = new List<string> { };
+            List<string> queryIDList = new List<string> { };
+            for(int i = 0; i < num; i++)
+            {
+                courseIDList.Add(collectionCourses1[i].CourseId);
+            }
+            for (int i = 0; i < num; i++)
+            {
+                Course course = this.GetCourse(courseIDList[i]);
+                if(course.CourseName.Contains(text))
+                {
+                    queryIDList.Add(course.CourseId);
+                }
+            }
+            return queryIDList;
+        }
+
         /*
         public List<string> GetCourseByMajor(string major_name)
         {
@@ -98,6 +123,7 @@ namespace StudyPlat.Models
             CollectionCourse[] collectionArray= new CollectionCourse[50];
             string[] idArray = new string[50];
             int count = collectionCourses.Count();
+            collectionArray = collectionCourses.ToArray();
             for(int i = 0; i < count; i++ )
             {
                 idArray[i] = collectionArray[i].CourseId;

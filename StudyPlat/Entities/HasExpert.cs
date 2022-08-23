@@ -9,10 +9,10 @@ namespace StudyPlat.Entities
 {
     public partial class HasExpert
     {
-        public string ExpertId { get; set; }
         public string MajorId { get; set; }
+        public string ExpertId { get; set; }
 
-        public virtual Expert Expert { get; set; }
+        public virtual User Expert { get; set; }
         public virtual Major Major { get; set; }
     }
 }

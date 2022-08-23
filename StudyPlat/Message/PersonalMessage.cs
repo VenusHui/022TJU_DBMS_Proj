@@ -10,6 +10,7 @@ namespace StudyPlat.Message
         public string user_name { get; set; }
         public string school { get; set; }
         public string major_name { get; set; }
+        public string phone_number { get; set; }
     }
     public class PersonalMessage
     {

@@ -14,11 +14,11 @@ namespace StudyPlat.Entities
             CollectionQuestion = new HashSet<CollectionQuestion>();
             ExplainQuestion = new HashSet<ExplainQuestion>();
             QuestionFromCourse = new HashSet<QuestionFromCourse>();
+            QuestionFromMajor = new HashSet<QuestionFromMajor>();
         }
 
         public string QuestionId { get; set; }
         public bool Status { get; set; }
-        public string Source { get; set; }
         public DateTime PostTime { get; set; }
         public string PicUrl { get; set; }
         public string QuestionStem { get; set; }
@@ -27,5 +27,6 @@ namespace StudyPlat.Entities
         public virtual ICollection<CollectionQuestion> CollectionQuestion { get; set; }
         public virtual ICollection<ExplainQuestion> ExplainQuestion { get; set; }
         public virtual ICollection<QuestionFromCourse> QuestionFromCourse { get; set; }
+        public virtual ICollection<QuestionFromMajor> QuestionFromMajor { get; set; }
     }
 }

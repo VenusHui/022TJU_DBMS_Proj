@@ -40,7 +40,9 @@ namespace StudyPlat.Controllers
         ///         {
         ///             "pic_url" : "http//:",
         ///             "answer_id_list": [""]
-        ///             "question_stem":"题干信息"
+        ///             "question_stem":"题干信息",
+        ///             "question_id":"1",
+        ///             "post_time" :""
         ///         }
         ///     }
         ///  code对应的情况:
@@ -90,7 +92,9 @@ namespace StudyPlat.Controllers
                     {
                         question_stem = question.QuestionStem,
                         pic_url = question.PicUrl,
-                        answer_id_list = answerIdArray
+                        answer_id_list = answerIdArray,
+                        question_id = question.QuestionId,
+                        post_time = question.PostTime  
                     }
                 });
             }
@@ -462,6 +466,363 @@ namespace StudyPlat.Controllers
                     data = new QueryData
                     {
                         IdList = IdList
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 用于在收藏夹界面搜索题目用的接口，参数:user_id/text
+        /// 返回符合条件的题目的IDList
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" = 0,
+        ///             "message" = "搜索到了该用户收藏题目ID的List数据"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             IdList = ["1"]
+        ///         }
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:搜索到了该用户收藏题目ID的List数据
+        /// -1:参数user_id或text为空，请检查
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult QueryCollectionQuestion([FromQuery]string user_id,[FromQuery]string text)
+        {
+            lock(obj)
+            {
+                MQuestion mQuestion = new MQuestion(_context);
+                List<string> QueryQuestionIDList = mQuestion.QueryCollectionQuestion(user_id, text);
+                if (user_id == null || text == null)
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "参数user_id或text为空，请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = QueryQuestionIDList
+                        }
+                    });
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "搜索到了该用户收藏题目ID的List数据"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = QueryQuestionIDList
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 用于在收藏夹界面搜索书本用的接口，参数:user_id/text
+        /// 返回符合条件的书本的ISBN的list
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" = 0,
+        ///             "message" = "搜索到了该用户收藏书本的ISBN码的List数据"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             IdList = ["1"]
+        ///         }
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:搜索到了该用户收藏书本的ISBN码的List数据
+        /// -1:参数user_id或text为空,请检查
+        /// </remarks>>
+        /// <param name="user_id"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+
+        [HttpGet]
+        public IActionResult QueryCollectionBook(string user_id,string text)
+        {
+            lock(obj)
+            {
+                MBook mBook = new MBook(_context);
+                List<string> QueryBookIDList = mBook.QueryBookCollection(user_id, text);
+
+                if (user_id == null || text == null)
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "参数user_id或text为空，请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = QueryBookIDList
+                        }
+                    });
+
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "搜索到了该用户收藏书本的ISBN码的List数据"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = QueryBookIDList
+                    }
+                });
+            }
+        }
+        /// <summary>
+        /// 用于在收藏夹界面搜索课程用到的接口，参数:user_id/text
+        /// 返回符合条件的课程的IDList
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" = 0,
+        ///             "message" = "搜索到了该用户收藏书本的ID的List数据"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             IdList = ["1"]
+        ///         }
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:搜索到了该用户收藏书本的ID的List数据
+        /// -1:参数user_id或text为空,请检查
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult QueryCollectionCourse(string user_id, string text)
+        {
+            lock (obj)
+            {
+                MCourse mCourse = new MCourse(_context);
+                List<string> QueryCourseIDList = mCourse.QueryCourseCollection(user_id, text);
+                if (user_id == null || text == null)
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "参数user_id或text为空，请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = QueryCourseIDList
+                        }
+                    });
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "搜索到了该用户收藏书本的ID的List数据"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = QueryCourseIDList
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 这是用于获得特定用户当前已收藏所有题目id的api,
+        /// </summary>
+        /// <remarks>
+        /// idArray是一个大小为50的string数组，包含有所有收藏题目的ID信息 :
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "返回了所有收藏题目的ID信息"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "idArray" : [""]
+        ///         }
+        ///     }
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
+        public IActionResult GetCollectionQuestion([FromQuery] string user_id)
+        {
+            lock (obj)
+            {
+                MQuestion mQuestion = new MQuestion(_context);
+                string[] questionIdArray = new string[50];
+                questionIdArray = mQuestion.GetQuestionCollection(user_id);
+                return new JsonResult(new CollectionMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "返回了所有收藏题目的ID信息"
+                    },
+                    data = new CollectionData
+                    {
+                        idArray = questionIdArray
+                    }
+                });
+            }
+        }
+        /// <summary>
+        /// 用于获得收藏书本的所有ID
+        /// </summary>
+        /// <remarks>
+        /// idArray是一个大小为50的string数组，包含有所有收藏书本的信息 :
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "返回了所有收藏书本的isbn码信息"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "idArray" : [""]
+        ///         }
+        ///     }
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
+        public IActionResult GetCollectionBook([FromQuery] string user_id)
+        {
+            lock(obj)
+            {
+                MBook mBook = new MBook(_context);
+                string[] bookIdCollection = new string[50];
+                bookIdCollection = mBook.GetBookCollection(user_id);
+                return new JsonResult(new CollectionMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "返回了所有收藏书本的isbn码信息"
+                    },
+                    data = new CollectionData
+                    {
+                        idArray = bookIdCollection
+                    }
+                });
+            }
+        }
+        /// <summary>
+        /// 用于获得收藏课程的所有ID
+        /// </summary>
+        /// <remarks>
+        /// idArray是一个大小为50的string数组，包含有所有课程ID的信息 :
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "返回了所有收藏课程的ID信息"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "idArray" : [""]
+        ///         }
+        ///     }
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
+        public IActionResult GetCollectionCourse([FromQuery] string user_id)
+        {lock (obj)
+            {
+                MCourse mCourse = new MCourse(_context);
+                string[] courseIdCollection = new string[50];
+                courseIdCollection = mCourse.GetCourseCollection(user_id);
+                return new JsonResult(new CollectionMessage { header = new Header { code = 0, message = "返回了所有收藏课程的ID信息" }, data = new CollectionData { idArray = courseIdCollection } });
+            }
+        }
+        /// <summary>
+        /// 获得专家答题界面所需展现的问题的IDList，参数：expert_id
+        /// </summary>
+        /// <remarks>
+        /// finishedIDList:该专家已回答过的问题的idlist
+        /// unfinishedIDList:待该专家回答的问题的idList
+        /// 返回信息实例:
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获得该专家回答过的题目的IDList和待回答题目IDList"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "finishedIDList" : ["1"],
+        ///             "unfinishedIDList" : ["2","3"]
+        ///         }
+        ///     }
+        /// </remarks>>
+        /// <param name="expert_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetQuestionForExpert(string expert_id)
+        {
+            lock(obj)
+            {
+                MUser mUser = new MUser(_context);
+                MMajor mMajor = new MMajor(_context);
+                string major_id = mMajor.GetMajorIDFromExpertID(expert_id);
+                List<string> finishedList = mUser.FindFinishedQuestion(expert_id);
+                List<string> unfinishedList = mUser.FindUnfinishedQuestion(major_id);
+                return new JsonResult(new ExpertMessage
+                {
+                    data = new ExpertData
+                    {
+                        finishedIDList = finishedList,
+                        unfinishedIDList = unfinishedList
+                    },
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获得该专家回答过的题目的IDList和待回答题目IDList"
                     }
                 });
             }

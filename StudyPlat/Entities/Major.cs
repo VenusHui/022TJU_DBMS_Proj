@@ -13,6 +13,7 @@ namespace StudyPlat.Entities
         {
             CourseFromMajor = new HashSet<CourseFromMajor>();
             HasExpert = new HashSet<HasExpert>();
+            QuestionFromMajor = new HashSet<QuestionFromMajor>();
         }
 
         public string MajorId { get; set; }
@@ -20,5 +21,6 @@ namespace StudyPlat.Entities
 
         public virtual ICollection<CourseFromMajor> CourseFromMajor { get; set; }
         public virtual ICollection<HasExpert> HasExpert { get; set; }
+        public virtual ICollection<QuestionFromMajor> QuestionFromMajor { get; set; }
     }
 }

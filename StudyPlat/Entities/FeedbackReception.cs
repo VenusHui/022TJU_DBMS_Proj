@@ -14,7 +14,7 @@ namespace StudyPlat.Entities
         public DateTime? ReceptTime { get; set; }
         public bool? Read { get; set; }
 
-        public virtual Administrator Administrator { get; set; }
+        public virtual User Administrator { get; set; }
         public virtual FeedbackInfo Feedback { get; set; }
     }
 }

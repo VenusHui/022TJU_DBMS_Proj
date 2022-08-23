@@ -100,6 +100,31 @@ namespace StudyPlat.Models
             return bookIdList;
         }
 
+        public List<string> QueryBookCollection(string user_id,string text)
+        {
+            IQueryable<CollectionBook> collectionBooks = _context.CollectionBook;
+            IQueryable<Book> books = _context.Book;
+            collectionBooks = collectionBooks.Where(u => u.UserId == user_id);
+            int num = collectionBooks.Count();
+            List<CollectionBook> collectionBooks1 = collectionBooks.ToList();
+            List<string> bookIDList = new List<string> { };
+            List<string> queryIDList = new List<string> { };
+            for(int i =0; i<num; i++ )
+            {
+                bookIDList.Add(collectionBooks1[i].Isbn);
+            }
+            for(int i =0; i< num; i++)
+            {
+                Book book = this.GetBook(bookIDList[i]);
+                if(book.BookName.Contains(text))
+                {
+                    queryIDList.Add(book.Isbn);
+                }
+            }
+            return queryIDList;
+
+        }
+
         public string[] GetBookCollection(string user_id)
         {
             IQueryable<CollectionBook> collectionBooks = _context.CollectionBook;

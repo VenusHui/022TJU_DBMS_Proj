@@ -15,6 +15,9 @@ namespace StudyPlat.Entities
             CollectionCourse = new HashSet<CollectionCourse>();
             CollectionQuestion = new HashSet<CollectionQuestion>();
             FeedbackPosting = new HashSet<FeedbackPosting>();
+            FeedbackReception = new HashSet<FeedbackReception>();
+            GiveAnswer = new HashSet<GiveAnswer>();
+            HasExpert = new HashSet<HasExpert>();
         }
 
         public string UserId { get; set; }
@@ -29,5 +32,8 @@ namespace StudyPlat.Entities
         public virtual ICollection<CollectionCourse> CollectionCourse { get; set; }
         public virtual ICollection<CollectionQuestion> CollectionQuestion { get; set; }
         public virtual ICollection<FeedbackPosting> FeedbackPosting { get; set; }
+        public virtual ICollection<FeedbackReception> FeedbackReception { get; set; }
+        public virtual ICollection<GiveAnswer> GiveAnswer { get; set; }
+        public virtual ICollection<HasExpert> HasExpert { get; set; }
     }
 }

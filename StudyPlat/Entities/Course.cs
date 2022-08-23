@@ -20,6 +20,7 @@ namespace StudyPlat.Entities
         public string CourseId { get; set; }
         public string CourseName { get; set; }
         public string Comprehension { get; set; }
+        public string PicUrl { get; set; }
 
         public virtual ICollection<CollectionCourse> CollectionCourse { get; set; }
         public virtual ICollection<CourseFromMajor> CourseFromMajor { get; set; }

@@ -10,7 +10,7 @@ using StudyPlat.Message;
 
 namespace StudyPlat.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class PersonalController : ControllerBase
     {
@@ -38,6 +38,7 @@ namespace StudyPlat.Controllers
         ///             "user_name" : "name",
         ///             "school" : "TJU",
         ///             "major_name" : "CS"
+        ///             "phone_number":"139190"
         ///         }
         ///     }
         ///  code对应的情况:
@@ -55,7 +56,7 @@ namespace StudyPlat.Controllers
             MMajor mMajor = new MMajor(_context);
             string major_name = mMajor.GetMajor(major_id).MajorName;
             if (major_name == "-1")
-                major_name = "";
+                major_name = null;
 
             JsonResult result = new JsonResult(new PersonalMessage
             {
@@ -68,7 +69,8 @@ namespace StudyPlat.Controllers
                 {
                     user_name = user.UserName,
                     school = user.SchoolName,
-                    major_name = major_name
+                    major_name = major_name,
+                    phone_number = user.PhoneNumber
                 }
             });
             return result;
@@ -94,11 +96,13 @@ namespace StudyPlat.Controllers
         ///         {
         ///             "user_name" : "name",
         ///             "school" : "TJU",
-        ///             "major_name" : "CS"
+        ///             "major_name" : "CS",
+        ///             "phone_number" : "139190"
         ///         }
         ///     }
         ///  code对应的情况:
         ///  0:获取个人信息成功
+        ///  -1:user_id或修改的用户名为空，请检查
         /// </remarks>
         /// <param name="user_id"></param>
         /// <returns></returns>
@@ -116,10 +120,25 @@ namespace StudyPlat.Controllers
             string major_id = formParameters["major_id"];
 
             string major_name = mMajor.GetMajor(major_id).MajorName;
+            if (major_name == "-1")
+                major_name = null;
+
+            if(user_id == null || name == null )
+            {
+                return new JsonResult(new PersonalMessage
+                {
+                    header = new Header
+                    {
+                        code = -1,
+                        message = "user_id或修改的用户名为空，请检查"
+                    }
+                });
+            }
 
             user.UserName = name;
             user.SchoolName = school;
-            user.MajorId = major_id;
+            if(major_name != null)
+                user.MajorId = major_id;
 
             _context.Update(user);
             _context.SaveChanges();
@@ -134,7 +153,8 @@ namespace StudyPlat.Controllers
                 {
                     user_name = user.UserName,
                     school = user.SchoolName,
-                    major_name = major_name
+                    major_name = major_name,
+                    phone_number = user.PhoneNumber
                 }
             });
             return result;

@@ -10,8 +10,8 @@ namespace StudyPlat.Message
         public string pic_url { get; set; }
         public string question_stem { get; set; }
         public string[] answer_id_list { get; set; }
-        public string source { get; set; }
         public DateTime post_time { get; set; }
+        public string question_id { get; set; }
     }
     public class QuestionMessage
     {

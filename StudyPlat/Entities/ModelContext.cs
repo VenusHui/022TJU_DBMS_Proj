@@ -19,7 +19,6 @@ namespace StudyPlat.Entities
         {
         }
 
-        public virtual DbSet<Administrator> Administrator { get; set; }
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<CollectionBook> CollectionBook { get; set; }
@@ -27,7 +26,6 @@ namespace StudyPlat.Entities
         public virtual DbSet<CollectionQuestion> CollectionQuestion { get; set; }
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<CourseFromMajor> CourseFromMajor { get; set; }
-        public virtual DbSet<Expert> Expert { get; set; }
         public virtual DbSet<ExplainQuestion> ExplainQuestion { get; set; }
         public virtual DbSet<FeedbackInfo> FeedbackInfo { get; set; }
         public virtual DbSet<FeedbackPosting> FeedbackPosting { get; set; }
@@ -39,6 +37,7 @@ namespace StudyPlat.Entities
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionFromBook> QuestionFromBook { get; set; }
         public virtual DbSet<QuestionFromCourse> QuestionFromCourse { get; set; }
+        public virtual DbSet<QuestionFromMajor> QuestionFromMajor { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,43 +52,6 @@ namespace StudyPlat.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:DefaultSchema", "ADMIN");
-
-            modelBuilder.Entity<Administrator>(entity =>
-            {
-                entity.ToTable("administrator");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasColumnName("password")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PhoneNumber)
-                    .HasColumnName("phone_number")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Position)
-                    .HasColumnName("position")
-                    .HasMaxLength(254)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SecondaryPassword)
-                    .IsRequired()
-                    .HasColumnName("secondary_password")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UserName)
-                    .HasColumnName("user_name")
-                    .HasMaxLength(254)
-                    .IsUnicode(false);
-            });
 
             modelBuilder.Entity<Answer>(entity =>
             {
@@ -279,8 +241,14 @@ namespace StudyPlat.Entities
                     .HasColumnType("CLOB");
 
                 entity.Property(e => e.CourseName)
+                    .IsRequired()
                     .HasColumnName("course_name")
                     .HasMaxLength(254)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PicUrl)
+                    .HasColumnName("pic_url")
+                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
@@ -315,21 +283,6 @@ namespace StudyPlat.Entities
                     .WithMany(p => p.CourseFromMajor)
                     .HasForeignKey(d => d.MajorId)
                     .HasConstraintName("SYS_C0010346");
-            });
-
-            modelBuilder.Entity<Expert>(entity =>
-            {
-                entity.ToTable("expert");
-
-                entity.Property(e => e.ExpertId)
-                    .HasColumnName("expert_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ExpertName)
-                    .HasColumnName("expert_name")
-                    .HasMaxLength(254)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ExplainQuestion>(entity =>
@@ -596,11 +549,6 @@ namespace StudyPlat.Entities
                     .HasColumnName("question_stem")
                     .HasColumnType("CLOB");
 
-                entity.Property(e => e.Source)
-                    .HasColumnName("source")
-                    .HasMaxLength(254)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Status).HasColumnName("status");
             });
 
@@ -662,6 +610,36 @@ namespace StudyPlat.Entities
                     .WithMany(p => p.QuestionFromCourse)
                     .HasForeignKey(d => d.QuestionId)
                     .HasConstraintName("SYS_C0010360");
+            });
+
+            modelBuilder.Entity<QuestionFromMajor>(entity =>
+            {
+                entity.HasKey(e => new { e.QuestionId, e.MajorId })
+                    .HasName("SYS_C0010566");
+
+                entity.ToTable("question_from_major");
+
+                entity.Property(e => e.QuestionId)
+                    .HasColumnName("question_id")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MajorId)
+                    .HasColumnName("major_id")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Major)
+                    .WithMany(p => p.QuestionFromMajor)
+                    .HasForeignKey(d => d.MajorId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("SYS_C0010567");
+
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.QuestionFromMajor)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("SYS_C0010568");
             });
 
             modelBuilder.Entity<User>(entity =>

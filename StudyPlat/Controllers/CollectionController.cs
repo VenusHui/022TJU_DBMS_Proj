@@ -25,126 +25,6 @@ namespace StudyPlat.Controllers
             _context = context;
         }
         /// <summary>
-        /// 这是用于获得特定用户当前已收藏所有题目id的api,
-        /// </summary>
-        /// <remarks>
-        /// idArray是一个大小为50的string数组，包含有所有收藏题目的ID信息 :
-        ///     
-        ///     Get/sample
-        ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "返回了所有收藏题目的ID信息"
-        ///         },
-        ///         "data":
-        ///         {
-        ///             "idArray" : [""]
-        ///         }
-        ///     }
-        /// </remarks>
-        /// <param name="user_id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult GetQuestion([FromQuery] string user_id)
-        {
-            MQuestion mQuestion = new MQuestion(_context);
-            string[] questionIdArray = new string[50];
-            questionIdArray = mQuestion.GetQuestionCollection(user_id);
-            return new JsonResult(new CollectionMessage
-            {
-                header = new Header
-                {
-                    code = 0,
-                    message = "返回了所有收藏题目的ID信息"
-                },
-                data = new CollectionData
-                {
-                    idArray = questionIdArray
-                }
-            });
-        }
-        /// <summary>
-        /// 用于获得收藏书本的所有ID
-        /// </summary>
-        /// <remarks>
-        /// idArray是一个大小为50的string数组，包含有所有收藏书本的信息 :
-        ///     
-        ///     Get/sample
-        ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "返回了所有收藏书本的isbn码信息"
-        ///         },
-        ///         "data":
-        ///         {
-        ///             "idArray" : [""]
-        ///         }
-        ///     }
-        /// </remarks>
-        /// <param name="user_id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult GetBook([FromQuery] string user_id)
-        {
-            MBook mBook = new MBook(_context);
-            string[] bookIdCollection = new string[50];
-            bookIdCollection = mBook.GetBookCollection(user_id);
-            return new JsonResult(new CollectionMessage
-            {
-                header = new Header
-                {
-                    code = 0,
-                    message = "返回了所有收藏书本的isbn码信息"
-                },
-                data = new CollectionData
-                {
-                    idArray = bookIdCollection
-                }
-            });
-        }
-        /// <summary>
-        /// 用于获得收藏课程的所有ID
-        /// </summary>
-        /// <remarks>
-        /// idArray是一个大小为50的string数组，包含有所有课程ID的信息 :
-        ///     
-        ///     Get/sample
-        ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "返回了所有收藏课程的ID信息"
-        ///         },
-        ///         "data":
-        ///         {
-        ///             "idArray" : [""]
-        ///         }
-        ///     }
-        /// </remarks>
-        /// <param name="user_id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult GetCourse([FromQuery] string user_id)
-        {
-            MCourse mCourse = new MCourse(_context);
-            string[] courseIdCollection = new string[50];
-            courseIdCollection = mCourse.GetCourseCollection(user_id);
-            return new JsonResult(new CollectionMessage
-            {
-                header = new Header
-                {
-                    code = 0,
-                    message = "返回了所有收藏课程的ID信息"
-                },
-                data = new CollectionData
-                {
-                    idArray = courseIdCollection
-                }
-            });
-        }
-        /// <summary>
         /// 收藏问题,参数:question_id, user_id
         /// </summary>
         /// <remarks>
@@ -152,11 +32,8 @@ namespace StudyPlat.Controllers
         ///     
         ///     Post/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "题目收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "题目收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:题目收藏成功
@@ -172,7 +49,7 @@ namespace StudyPlat.Controllers
         {
             MQuestion mQuestion = new MQuestion(_context);
             int num = mQuestion.CollectQuestion(user_id, question_id);
-            if(num == 1)//成功
+            if(num == 0)//成功
             {
                 return new JsonResult(new Header
                 {
@@ -211,14 +88,11 @@ namespace StudyPlat.Controllers
         /// </summary>
         /// <remarks>
         /// header中会返回收藏成功或失败的信息，以收藏成功为例 :
-        ///     
+        ///       
         ///     Post/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "书本收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "书本收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:书本收藏成功
@@ -272,14 +146,11 @@ namespace StudyPlat.Controllers
         /// </summary>
         /// <remarks>
         /// header中会返回收藏成功或失败的信息，以收藏成功为例 :
-        ///     
+        /// 
         ///     Post/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "课程收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "课程收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:课程收藏成功
@@ -336,11 +207,8 @@ namespace StudyPlat.Controllers
         ///     
         ///     Delete/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "取消收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "取消收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:取消收藏成功
@@ -379,11 +247,8 @@ namespace StudyPlat.Controllers
         ///     
         ///     Delete/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "取消收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "取消收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:取消收藏成功
@@ -422,11 +287,8 @@ namespace StudyPlat.Controllers
         ///     
         ///     Delete/sample
         ///     {
-        ///         "header":
-        ///         {
-        ///             "code" : 0,
-        ///             "message" : "取消收藏成功"
-        ///         },
+        ///         "code" : 0,
+        ///         "message" : "取消收藏成功"
         ///     }
         ///  code对应的情况:
         ///  0:取消收藏成功
@@ -436,7 +298,7 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpDelete]
-        public IActionResult DecollectCourse(string user_id, string course_id)
+        public IActionResult DeCollectCourse(string user_id, string course_id)
         {
             MCourse mCourse = new MCourse(_context);
             int num = mCourse.DeCollectCourse(user_id, course_id);

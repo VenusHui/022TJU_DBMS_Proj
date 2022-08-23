@@ -16,6 +16,11 @@ namespace StudyPlat.Models
             _context = context;
         }
 
+        public string GenerateID()
+        {
+            IQueryable<Answer> answers = _context.Answer;
+            return (answers.Count() + 1).ToString();
+        }
         public Answer GetAnswer(string answer_id)
         {
             IQueryable<Answer> answers = _context.Answer;
@@ -52,6 +57,42 @@ namespace StudyPlat.Models
                 answerIdArray[i] = mapArray[i].AnswerId;
             }
             return answerIdArray;
+        }
+
+        public string findQuestionIDFromAnswerID(string answer_id)
+        {
+            IQueryable<ExplainQuestion> explainQuestions = _context.ExplainQuestion;
+            explainQuestions = explainQuestions.Where(u => u.AnswerId == answer_id);
+            return explainQuestions.First().QuestionId;
+        }
+        public void AnswerQuestion(string answer_id,string question_id,string answer_content,string expert_id)
+        {
+            IQueryable<Question> questions = _context.Question;
+            questions = questions.Where(u => u.QuestionId == question_id);
+            Question question = questions.First();
+            question.Status = true;
+            GiveAnswer giveAnswer = new GiveAnswer
+            {
+                ExpertId = expert_id,
+                AdditionDate = DateTime.Now,
+                AnswerId = answer_id
+            };
+            Answer answer = new Answer
+            {
+                AnswerId = answer_id,
+                AnswerContent = answer_content
+            };
+            ExplainQuestion explainQuestion = new ExplainQuestion
+            {
+                QuestionId = question_id,
+                AnswerId = answer_id,
+                CreateTime = DateTime.Now,
+            };
+            _context.Add(giveAnswer);
+            _context.Add(answer);
+            _context.Add(explainQuestion);
+            _context.Update(question);
+            _context.SaveChanges();
         }
     }
 }

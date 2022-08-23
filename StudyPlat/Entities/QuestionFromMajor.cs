@@ -7,13 +7,12 @@ using System.Collections.Generic;
 
 namespace StudyPlat.Entities
 {
-    public partial class GiveAnswer
+    public partial class QuestionFromMajor
     {
-        public string ExpertId { get; set; }
-        public string AnswerId { get; set; }
-        public DateTime? AdditionDate { get; set; }
+        public string QuestionId { get; set; }
+        public string MajorId { get; set; }
 
-        public virtual Answer Answer { get; set; }
-        public virtual User Expert { get; set; }
+        public virtual Major Major { get; set; }
+        public virtual Question Question { get; set; }
     }
 }

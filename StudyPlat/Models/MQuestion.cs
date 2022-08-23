@@ -62,6 +62,30 @@ namespace StudyPlat.Models
             return questionIdList;
         }
 
+        public List<string> QueryCollectionQuestion(string user_id,string text)
+        {
+            IQueryable<CollectionQuestion> collectionQuestions = _context.CollectionQuestion;
+            IQueryable<Question> questions = _context.Question;
+            collectionQuestions = collectionQuestions.Where(u => u.UserId == user_id);
+            int num = collectionQuestions.Count();
+            List<CollectionQuestion> collectionQuestions1 = collectionQuestions.ToList();
+            List<string> questionIDList = new List<string> { };
+            List<string> QueryIDList = new List<string> { };
+            for(int i = 0; i < num; i++ )
+            {
+                questionIDList.Add(collectionQuestions1[i].QuestionId);
+            }
+            for(int i = 0; i < num; i++)
+            {
+                Question question = this.GetQuestion(questionIDList[i]);
+                if(question.QuestionStem.Contains(text))
+                {
+                    QueryIDList.Add(question.QuestionId);
+                }
+            }
+            return QueryIDList;
+        }
+
 
         public string[] GetQuestionCollection(string user_id)//为了让前端获得收藏的题目的id
         {
@@ -146,11 +170,13 @@ namespace StudyPlat.Models
             }
         }
         
-        public int AddQuestion(Question question,string book_name,string course_name)
+        public int AddQuestion(Question question,string book_name,string course_name,string major_name)
         {
             string question_id = question.QuestionId;
             MBook mBook = new MBook(_context);
             MCourse mCourse = new MCourse(_context);
+            MMajor mMajor = new MMajor(_context);
+            string major_id = mMajor.FindMajor(major_name);
             string isbn = mBook.FindBook(book_name);
             string course_id = mCourse.FindCourse(course_name);
             if(isbn =="-1" || isbn =="-2")
@@ -171,6 +197,11 @@ namespace StudyPlat.Models
                 QuestionId = question.QuestionId,
                 CourseId = course_id
             };
+            QuestionFromMajor questionFromMajors = new QuestionFromMajor
+            {
+                MajorId = major_id,
+                QuestionId = question.QuestionId
+            };
             int num = this.CheckQuestion(question_id);
             if(num >= 1)
             {
@@ -180,10 +211,18 @@ namespace StudyPlat.Models
             {
                 _context.Add(questionFromBook);
                 _context.Add(questionFromCourses);
+                _context.Add(questionFromMajors);
                 _context.Add(question);
                 _context.SaveChanges();
                 return 0;
             }
+        }
+
+        public bool getStatus(string question_id)
+        {
+            IQueryable<Question> questions = _context.Question;
+            questions = questions.Where(u => u.QuestionId == question_id);
+            return questions.First().Status;
         }
 
     }
