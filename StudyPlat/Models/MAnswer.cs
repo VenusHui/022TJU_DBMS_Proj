@@ -44,19 +44,19 @@ namespace StudyPlat.Models
         /*
          * 通过一个question_id来获得对应的answerId的顺序表
          */
-        public string[] GetAnswerIdArray(string question_id)
+        public List<string> GetAnswerIdList(string question_id)
         {
             IQueryable<ExplainQuestion> explainQuestions = _context.ExplainQuestion;
             explainQuestions = explainQuestions.Where(u => u.QuestionId == question_id);
-            ExplainQuestion[] mapArray = new ExplainQuestion[5];
-            mapArray = explainQuestions.ToArray();
-            string[] answerIdArray = new string[5];
+            List<ExplainQuestion> mapArray = new List<ExplainQuestion>{ };
+            mapArray = explainQuestions.ToList();
+            List<string> answerIdList = new List<string> { };
             int num = explainQuestions.Count();
             for (int i = 0; i < num; i++)
             {
-                answerIdArray[i] = mapArray[i].AnswerId;
+                answerIdList.Add(mapArray[i].AnswerId);
             }
-            return answerIdArray;
+            return answerIdList;
         }
 
         public string findQuestionIDFromAnswerID(string answer_id)

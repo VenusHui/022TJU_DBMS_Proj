@@ -73,13 +73,13 @@ namespace StudyPlat.Controllers
                         data = new QuestionData
                         {
                             pic_url = "",
-                            answer_id_list = new string[50]
+                            answer_id_list = new List<string> { }
                         }
                     });
                 }
                 string Qid = question.QuestionId;
-                string[] answerIdArray = new string[5];
-                answerIdArray = mAnswer.GetAnswerIdArray(Qid);
+                List<string> answerIdList = new List<string> { };
+                answerIdList = mAnswer.GetAnswerIdList(Qid);
 
                 return new JsonResult(new QuestionMessage
                 {
@@ -92,7 +92,7 @@ namespace StudyPlat.Controllers
                     {
                         question_stem = question.QuestionStem,
                         pic_url = question.PicUrl,
-                        answer_id_list = answerIdArray,
+                        answer_id_list = answerIdList,
                         question_id = question.QuestionId,
                         post_time = question.PostTime  
                     }
