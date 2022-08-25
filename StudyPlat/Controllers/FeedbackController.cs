@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StudyPlat.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class FeedbackController : ControllerBase
     {

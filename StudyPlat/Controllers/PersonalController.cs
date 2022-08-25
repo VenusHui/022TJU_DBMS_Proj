@@ -159,5 +159,53 @@ namespace StudyPlat.Controllers
             });
             return result;
         }
+
+        /// <summary>
+        /// 修改密码
+        /// 参数:user_id
+        /// 表单:old_password/new_password
+        /// </summary>
+        /// <remarks>
+        /// 
+        ///     Post/sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "修改密码成功"
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:修改密码成功
+        /// -1:数据库有误，请检查
+        /// -2:输入的原密码与数据库中存储的数据不一致，请检查后再次输入
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult UpdatePassword(string user_id)
+        {
+            MUser mUser = new MUser(_context);
+            IFormCollection formParams = HttpContext.Request.Form;
+            string old_password = formParams["old_password"];
+            string new_password = formParams["new_password"];
+            string message;
+            int num = mUser.ModifyPassword(user_id, old_password, new_password);
+            if(num == 0)
+            {
+                message = "修改密码成功";
+            }
+            else if(num == -1)
+            {
+                message = "数据库有误，请检查";
+            }
+            else
+            {
+                message = "输入的原密码与数据库中存储的数据不一致，请检查后再次输入";
+            }
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
     }
 }

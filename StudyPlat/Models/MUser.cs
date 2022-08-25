@@ -89,5 +89,31 @@ namespace StudyPlat.Models
             }
             return questionIDList;
         }
+
+        public int ModifyPassword(string user_id,string old_password, string new_password)
+        {
+            IQueryable<User> users = _context.User;
+            users = users.Where(u => u.UserId == user_id);
+
+            string old;
+            try
+            {
+                User oldUser = users.First();
+                old = oldUser.Password;
+                //验证成功
+                if(old == old_password)
+                {
+                    oldUser.Password = new_password;
+                    _context.Update(oldUser);
+                    _context.SaveChanges();
+                    return 0;//成功
+                }
+                return -2;//旧密码与数据库中的数据不相符
+            }
+            catch
+            {
+                return -1;//数据库有问题
+            }
+        }
     }
 }
