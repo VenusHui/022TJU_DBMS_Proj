@@ -17,6 +17,11 @@ namespace StudyPlat.Models
             _context = context;
         }
 
+        public string GenerateID()
+        {
+            IQueryable<Major> majors = _context.Major;
+            return (majors.Count() + 1).ToString();
+        }
         public Major GetMajor(string major_id)
         {
             IQueryable<Major> majors = _context.Major;
@@ -43,7 +48,7 @@ namespace StudyPlat.Models
             majors = majors.Where(u => u.MajorName == major_name);
             if(majors.Count() == 1)
             {
-                return majors.First().MajorName;
+                return majors.First().MajorId;
             }
             else if (majors.Count() > 1)
             {
@@ -60,6 +65,47 @@ namespace StudyPlat.Models
             IQueryable<HasExpert> hasExperts = _context.HasExpert;
             hasExperts = hasExperts.Where(u => u.ExpertId == expert_id);
             return hasExperts.First().MajorId;
+        }
+
+        public List<string> GetMajorID()
+        {
+            IQueryable<Major> majors = _context.Major;
+            List<string> IDList = new List<string> { };
+            foreach(var major in majors)
+            {
+                IDList.Add(major.MajorId);
+            }
+            return IDList;
+        }
+
+        public List<string> GetMajorName()
+        {
+            IQueryable<Major> majors = _context.Major;
+            List<string> NameList = new List<string> { };
+            foreach(var major in majors)
+            {
+                NameList.Add(major.MajorName);
+            }
+            return NameList;
+        }
+
+        public int AddMajor(string major_id,string major_name)
+        {
+            Major major = new Major
+            {
+                MajorId = major_id,
+                MajorName = major_name
+            };
+            try
+            {
+                _context.Add(major);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -2;
+            }
         }
     }
 }

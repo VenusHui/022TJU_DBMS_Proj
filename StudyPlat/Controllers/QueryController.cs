@@ -786,6 +786,7 @@ namespace StudyPlat.Controllers
         /// finishedIDList:该专家已回答过的问题的idlist
         /// unfinishedIDList:待该专家回答的问题的idList
         /// 返回信息实例:
+        /// 
         ///     Get/Sample:
         ///     {
         ///         "header":
@@ -823,6 +824,255 @@ namespace StudyPlat.Controllers
                     {
                         code = 0,
                         message = "获得该专家回答过的题目的IDList和待回答题目IDList"
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 获得major相关信息，分别获得两个list，一个是IDList一个是NameList
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获取专业相关信息成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "IDList" : ["1"],
+        ///             "NameList" : ["数学"]
+        ///         }
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:获取专业信息成功
+        /// </remarks>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetMajorInfo()
+        {
+            lock(obj)
+            {
+                MMajor mMajor = new MMajor(_context);
+                List<string> IDList = mMajor.GetMajorID();
+                List<string> NameList = mMajor.GetMajorName();
+                return new JsonResult(new MajorMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取专业相关信息成功"
+                    },
+                    data = new MajorInfo
+                    {
+                        IDList = IDList,
+                        NameList = NameList
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 用于课程库，根据专业名来获取相关课程的IDList，参数:major_name
+        /// 当major_name 为“所有专业”时返回所有course的IDlist
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获取对应专业下的课程IDList成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "IDList" : ["1"],
+        ///         }
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:获取对应专业下的课程IDList成功
+        /// -1:major_name有误，数据库中没有相关信息。请检查
+        /// -2:major_name为空，请检查
+        /// </remarks>
+        /// <param name="major_name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetCourseByMajor(string major_name)
+        {
+            lock(obj)
+            {
+                MMajor mMajor = new MMajor(_context);
+                MCourse mCourse = new MCourse(_context);
+                string major_id = mMajor.FindMajor(major_name);
+                if(major_name == null)
+                {
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -2,
+                            message = "major_name为空，请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = new List<string> { }
+                        }
+                    });
+                }
+                if (major_id == "-1")
+                {
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "major_name有误，数据库中没有相关信息。请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = new List<string> { }
+                        }
+                    });
+                }
+                List<string> courseIDList = new List<string> { };
+                courseIDList = mCourse.GetCourseByMajor(major_id);
+
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取对应专业下的课程IDList成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = courseIDList
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 用于书籍库，根据专业名获得相关书籍的ISBN的List，参数:major_name
+        /// 当major_name为“所有专业”时，返回所有书籍的ISBN List
+        /// </summary>
+        /// <remarks>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获得对应专业下的ISBN List成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "IDList" : ["1"],
+        ///         }
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:获得对应专业下的ISBN List成功
+        /// -1:major_name有误，数据库中没有相关信息。请检查
+        /// -2:major_name为空，请检查
+        /// </remarks>
+        /// <param name="major_name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetBookByMajor(string major_name)
+        {
+            lock(obj)
+            {
+                MMajor mMajor = new MMajor(_context);
+                MCourse mCourse = new MCourse(_context);
+                MBook mBook = new MBook(_context);
+                List<string> ISBNList = new List<string> { };
+                if (major_name == null)
+                {
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -2,
+                            message = "major_name为空，请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = new List<string> { }
+                        }
+                    });
+                }
+                string major_id = mMajor.FindMajor(major_name);
+                if(major_id == "-1")
+                {
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = -1,
+                            message = "major_name有误，数据库中没有相关信息。请检查"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = new List<string> { }
+                        }
+                    });
+                }
+                else if (major_id == "0")
+                {
+                    IQueryable<Book> books = _context.Book;
+                    foreach(var row in books)
+                    {
+                        ISBNList.Add(row.Isbn);
+                    }
+                    return new JsonResult(new QueryMessage
+                    {
+                        header = new Header
+                        {
+                            code = 0,
+                            message = "获得对应专业下的ISBN List成功"
+                        },
+                        data = new QueryData
+                        {
+                            IdList = ISBNList
+                        }
+                    });
+                }
+                List<string> courseIDList = mCourse.GetCourseByMajor(major_id);
+
+                ISBNList = mBook.GetBookByCourse(courseIDList);
+                int num = ISBNList.Count();
+                //对ISBNList进行去重
+                for(int i = 0; i < num; i++)
+                {
+                    for(int j = i+1; j < num; j++)
+                    {
+                        if(ISBNList[j] == ISBNList[i])
+                        {
+                            ISBNList.RemoveAt(j);
+                            num--;
+                        }
+                    }
+                }
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获得对应专业下的ISBN List成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = ISBNList
                     }
                 });
             }

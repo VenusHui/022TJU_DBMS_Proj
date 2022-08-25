@@ -201,5 +201,20 @@ namespace StudyPlat.Models
                 return -1;//有问题
             }
         }
+
+        public List<string> GetBookByCourse(List<string> courseIDList)
+        {
+            List<string> ISBNList = new List<string> { };
+            foreach(var courseID in courseIDList)
+            {
+                IQueryable<HasBook> hasBooks = _context.HasBook;
+                hasBooks = hasBooks.Where(u => u.CourseId == courseID);
+                foreach(var row in hasBooks)
+                {
+                    ISBNList.Add(row.Isbn);
+                }
+            }
+            return ISBNList;
+        }
     }
 }

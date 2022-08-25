@@ -99,23 +99,28 @@ namespace StudyPlat.Models
             return queryIDList;
         }
 
-        /*
-        public List<string> GetCourseByMajor(string major_name)
+        
+        public List<string> GetCourseByMajor(string major_id)
         {
-            IQueryable<Major> majors = _context.Major;
-            majors = majors.Where(u => u.MajorName == major_name);
-            string majorId = majors.First().MajorId;
-            IQueryable<Course> courses = _context.Course;
-            courses = courses.Where(u => u.);
-            int num = courses.Count();
-            List<string> courseIdList = new List<string> { };
-            Course[] courseArray = courses.ToArray();
-            for (int i = 0; i < num; i++)
+            IQueryable<CourseFromMajor> courseFromMajors = _context.CourseFromMajor;
+            List<string> IDList = new List<string> { };
+            //如果是全部课程
+            if (major_id == "0")
             {
-                courseIdList.Add(courseArray[i].CourseId);
+                IQueryable<Course> courses = _context.Course;
+                foreach(var row in courses)
+                {
+                    IDList.Add(row.CourseId);
+                }
+                return IDList;
             }
-            return courseIdList;
-        }*/
+            courseFromMajors = courseFromMajors.Where(u => u.MajorId == major_id);
+            foreach(var row in courseFromMajors)
+            {
+                IDList.Add(row.CourseId);
+            }
+            return IDList;
+        }
         public string[] GetCourseCollection(string user_id)
         {
             IQueryable<CollectionCourse> collectionCourses = _context.CollectionCourse;
@@ -192,11 +197,30 @@ namespace StudyPlat.Models
                 return -1;
             }
         }
-        /*
+        
         public int AddCourse(Course course,string major_name)
         {
             MMajor mMajor = new MMajor(_context);
             string major_id = mMajor.FindMajor(major_name);
-        }*/
+            if (major_id == "-1")//说明没有对应的major_name
+                return -2;
+            IQueryable<CourseFromMajor> courseFromMajors = _context.CourseFromMajor;
+            CourseFromMajor relation = new CourseFromMajor
+            {
+                CourseId = course.CourseId,
+                MajorId = major_id
+            };
+            try
+            {
+                _context.Add(course);
+                _context.Add(relation);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
     }
 }

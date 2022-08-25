@@ -228,10 +228,25 @@ namespace StudyPlat.Controllers
             });
         }
         /// <summary>
-        /// 
+        /// 添加一门课程，利用表单形式传参，一次只能绑定一个专业，后续需要添加专业要去调用相应api
+        /// key:course_name/comprehension/major_name/pic_url
         /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Post/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "课程添加成功"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:课程添加成功
+        /// -1:数据库有异常
+        /// -2:没有对应的major_name
+        /// </remarks>
         /// <returns></returns>
-        /*
+
         [HttpPost]
         public IActionResult AddCourse()
         {
@@ -241,7 +256,78 @@ namespace StudyPlat.Controllers
             string course_name = formParams["course_name"];
             string comprehension = formParams["comprehension"];
             string major_name = formParams["major_name"];
-
-        }*/
+            string pic_url = formParams["pic_url"];
+            Course course = new Course
+            {
+                CourseId = course_id,
+                Comprehension = comprehension,
+                CourseName = course_name,
+                PicUrl = pic_url
+            };
+            int num = mCourse.AddCourse(course, major_name);
+            string message;
+            if (num == -2)
+                message = "没有对应的major_name";
+            else if (num == -1)
+                message = "数据库有异常";
+            else
+                message = "课程添加成功";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
+        /// <summary>
+        /// 添加专业的api，使用表单传参
+        /// key:major_name
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Post/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "专业添加成功"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:专业添加成功
+        /// -1:该专业已存在
+        /// -2:数据库出现错误，请检查
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AddMajor()
+        {
+            MMajor mMajor = new MMajor(_context);
+            IFormCollection formParams = HttpContext.Request.Form;
+            string major_name = formParams["major_name"];
+            string major_id = mMajor.FindMajor(major_name);
+            if(major_id != "-1")
+            {
+                return new JsonResult(new Header
+                {
+                    code = -1,
+                    message = "该专业已存在"
+                });
+            }
+            major_id = mMajor.GenerateID();
+            int num = mMajor.AddMajor(major_id, major_name);
+            string message;
+            if(num == 0)
+            {
+                message = "专业添加成功";
+            }
+            else
+            {
+                message = "数据库出现错误，请检查";
+            }
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
     }
 }
