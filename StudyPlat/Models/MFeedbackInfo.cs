@@ -12,7 +12,26 @@ namespace StudyPlat.Models
         public readonly ModelContext _context;
         public MFeedbackInfo(ModelContext context)
         {
-
+            _context = context;
+        }
+        public int AddFeedBack(string content)
+        {
+            FeedbackInfo feedbackInfo = new FeedbackInfo
+            {
+                Content = content,
+                PostTime = DateTime.Now,
+                IsFinished = false
+            };
+            try
+            {
+                _context.Add(feedbackInfo);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -1;//数据库有问题
+            }
         }
     }
 }

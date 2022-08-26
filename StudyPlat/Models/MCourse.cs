@@ -18,11 +18,6 @@ namespace StudyPlat.Models
             _context = context;
         }
 
-        public string GenerateId()
-        {
-            IQueryable<Course> courses = _context.Course;
-            return (courses.Count() + 1).ToString();
-        }
         public Course GetCourse(string course_id)
         {
             IQueryable<Course> courses = _context.Course;
@@ -204,15 +199,24 @@ namespace StudyPlat.Models
             string major_id = mMajor.FindMajor(major_name);
             if (major_id == "-1")//说明没有对应的major_name
                 return -2;
+            try
+            {
+                _context.Add(course);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return -1;
+            }
+            string course_id = this.FindCourse(course.CourseName);
             IQueryable<CourseFromMajor> courseFromMajors = _context.CourseFromMajor;
             CourseFromMajor relation = new CourseFromMajor
             {
-                CourseId = course.CourseId,
+                CourseId = course_id,
                 MajorId = major_id
             };
             try
             {
-                _context.Add(course);
                 _context.Add(relation);
                 _context.SaveChanges();
                 return 0;

@@ -20,11 +20,20 @@ namespace StudyPlat.Models
             QuestionFromCourse = new HashSet<QuestionFromCourse>();
         }
 
-        public string GenerateId()
+        public string findQuestion(string question_stem)
         {
             IQueryable<Question> questions = _context.Question;
-            return (questions.Count() + 1).ToString();
+            questions = questions.Where(u => u.QuestionStem == question_stem);
+            try
+            {
+                return questions.First().QuestionId;
+            }
+            catch
+            {
+                return "-1";
+            }
         }
+
         public Question GetQuestion(string question_id)
         {
             IQueryable<Question> questions = _context.Question;
@@ -172,7 +181,9 @@ namespace StudyPlat.Models
         
         public int AddQuestion(Question question,string book_name,string course_name,string major_name)
         {
-            string question_id = question.QuestionId;
+            string valid = this.findQuestion(question.QuestionStem);
+            if (valid != "-1")
+                return -4;//说明已经存在题干相同的题目
             MBook mBook = new MBook(_context);
             MCourse mCourse = new MCourse(_context);
             MMajor mMajor = new MMajor(_context);
@@ -187,34 +198,43 @@ namespace StudyPlat.Models
             {
                 return -3;//课程名有问题
             }
+            try
+            {
+                _context.Add(question);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return -1;//数据库有误，请检查代码后重试
+            }
+            string question_id = this.findQuestion(question.QuestionStem);
             QuestionFromBook questionFromBook = new QuestionFromBook
             {
-                QuestionId = question.QuestionId,
+                QuestionId = question_id,
                 Isbn = isbn
             };
             QuestionFromCourse questionFromCourses = new QuestionFromCourse
             {
-                QuestionId = question.QuestionId,
+                QuestionId = question_id,
                 CourseId = course_id
             };
             QuestionFromMajor questionFromMajors = new QuestionFromMajor
             {
                 MajorId = major_id,
-                QuestionId = question.QuestionId
+                QuestionId = question_id
             };
             int num = this.CheckQuestion(question_id);
-            if(num >= 1)
-            {
-                return -1;//说明已经有这个题目了，相应的question_id
-            }
-            else
+            try
             {
                 _context.Add(questionFromBook);
                 _context.Add(questionFromCourses);
                 _context.Add(questionFromMajors);
-                _context.Add(question);
                 _context.SaveChanges();
                 return 0;
+            }
+            catch
+            {
+                return -1;
             }
         }
 

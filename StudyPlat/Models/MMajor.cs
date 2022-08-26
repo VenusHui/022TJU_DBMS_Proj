@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using StudyPlat.Entities;
+using System.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace StudyPlat.Models
 {
@@ -17,11 +22,6 @@ namespace StudyPlat.Models
             _context = context;
         }
 
-        public string GenerateID()
-        {
-            IQueryable<Major> majors = _context.Major;
-            return (majors.Count() + 1).ToString();
-        }
         public Major GetMajor(string major_id)
         {
             IQueryable<Major> majors = _context.Major;
@@ -89,16 +89,16 @@ namespace StudyPlat.Models
             return NameList;
         }
 
-        public int AddMajor(string major_id,string major_name)
+        public int AddMajor(string major_name)
         {
-            Major major = new Major
+            /*Major major = new Major
             {
-                MajorId = major_id,
                 MajorName = major_name
-            };
+            };*/
+            var major = new Major { MajorName = major_name };
             try
             {
-                _context.Add(major);
+                _context.Major.Add(major);
                 _context.SaveChanges();
                 return 0;
             }

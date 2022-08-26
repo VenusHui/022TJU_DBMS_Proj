@@ -23,7 +23,7 @@ namespace StudyPlat.Controllers
 
         /// <summary>
         /// 用于添加Book的api，以表单形式传参
-        /// key:isbn/book_name/author/publisher/year/month/day/comprehension/pic_url
+        /// key:isbn/book_name/author/publisher/year/month/day/comprehension/pic_url/course_name
         /// </summary>
         /// <remarks>
         /// 返回信息示例 :
@@ -38,6 +38,7 @@ namespace StudyPlat.Controllers
         /// 0:保存成功
         /// -1:isbn码出现重复，请检查数据库内是否已经录入相关内容
         /// -2:isbn码/bookName/picUrl未填写，请完善后再次尝试录入书本信息
+        /// -3:已储存了同名书籍
         /// </remarks>
         [HttpPost]
         public IActionResult AddBook()
@@ -54,6 +55,14 @@ namespace StudyPlat.Controllers
             string comprehension = formParameters["comprehension"];
             string picUrl = formParameters["pic_url"];
             string course_name = formParameters["course_name"];
+
+            string id = mBook.FindBook(bookName);
+            if (id != "-1")
+                return new JsonResult(new Header
+                {
+                    code = -3,
+                    message = "已储存了同名书籍"
+                });
 
             if(strYear!=null && strMonth!=null && strDay!=null && isbn!=null && bookName!=null && picUrl!=null)
             {
@@ -122,7 +131,7 @@ namespace StudyPlat.Controllers
 
         /// <summary>
         /// 用于添加题目的api，用表单来传参
-        /// key:question_stem/pic_url/course_name/book_name
+        /// key:question_stem/pic_url/course_name/book_name/major_name
         /// </summary>
         /// <remarks>
         /// 返回信息示例 :
@@ -138,13 +147,13 @@ namespace StudyPlat.Controllers
         /// -1:question_id出现重复，请检查数据库后再试
         /// -2:输入的书籍名称有误，请检查数据库后再试
         /// -3:输入的课程名称有误，请检查数据库后再试
+        /// -4:说明存在题干相同的题目
         /// </remarks>
         [HttpPost]
         public IActionResult AddQuestion()
         {
             IFormCollection formParams = HttpContext.Request.Form;
             MQuestion mQuestion = new MQuestion(_context);
-            string question_id = mQuestion.GenerateId();
             string question_stem = formParams["question_stem"];
             string pic_url = formParams["pic_url"];
             string course_name = formParams["course_name"];
@@ -152,7 +161,6 @@ namespace StudyPlat.Controllers
             string major_name = formParams["major_name"];
             Question newQuestion = new Question
             {
-                QuestionId = question_id,
                 Status = false,
                 PostTime = DateTime.Now,
                 PicUrl = pic_url,
@@ -163,11 +171,13 @@ namespace StudyPlat.Controllers
             if (num == 0)
                 message = "保存成功";
             else if (num == -1)
-                message = "question_id出现重复，请检查数据库后再试";
+                message = "数据库有误，请检查代码后重试";
             else if (num == -2)
                 message = "输入的书籍名称有误，请检查数据库后再试";
-            else
+            else if (num == -3)
                 message = "输入的课程名称有误，请检查数据库后再试";
+            else
+                message = "说明存在题干相同的题目";
             return new JsonResult(new Header
             {
                 code = num,
@@ -190,7 +200,9 @@ namespace StudyPlat.Controllers
         /// code对应情况:
         /// 0:成功回答问题
         /// -1:回答传入的信息有误，可能是传入的question_id或是expert_id为空，或是回答的答案为空
-        /// -2:这个用户不是专家
+        /// -2:已经有相同内容的答案
+        /// -3回答传入的信息有误，可能是传入的question_id或是expert_id为空，或是回答的答案为空
+        /// -4:这个用户不是专家
         /// </remarks>>
         /// <param name="question_id"></param>
         /// <param name="expert_id"></param>
@@ -205,7 +217,7 @@ namespace StudyPlat.Controllers
             {
                 return new JsonResult(new Header
                 {
-                    code = -1,
+                    code = -3,
                     message = "回答传入的信息有误，可能是传入的question_id或是expert_id为空，或是回答的答案为空"
                 });
             }
@@ -215,16 +227,28 @@ namespace StudyPlat.Controllers
             {
                 return new JsonResult(new Header
                 {
-                    code = -2,
+                    code = -4,
                     message = "这个用户不是专家"
                 });
             }
-            string answer_id = mAnswer.GenerateID();
-            mAnswer.AnswerQuestion(answer_id, question_id, answer_content, expert_id);
+            int num = mAnswer.AnswerQuestion( question_id, answer_content, expert_id);
+            string message;
+            if( num == 0)
+            {
+                message = "成功回答问题";
+            }
+            else if (num == -1)
+            {
+                message = "数据库出现问题";
+            }
+            else
+            {
+                message = "已经有相同内容的答案";
+            }
             return new JsonResult(new Header
             {
-                code = 0,
-                message = "成功回答问题"
+                code = num,
+                message = message
             });
         }
         /// <summary>
@@ -244,6 +268,7 @@ namespace StudyPlat.Controllers
         /// 0:课程添加成功
         /// -1:数据库有异常
         /// -2:没有对应的major_name
+        /// -3:数据库中已存在同名课程
         /// </remarks>
         /// <returns></returns>
 
@@ -252,14 +277,20 @@ namespace StudyPlat.Controllers
         {
             IFormCollection formParams = HttpContext.Request.Form;
             MCourse mCourse = new MCourse(_context);
-            string course_id = mCourse.GenerateId();
             string course_name = formParams["course_name"];
             string comprehension = formParams["comprehension"];
             string major_name = formParams["major_name"];
             string pic_url = formParams["pic_url"];
+
+            string id = mCourse.FindCourse(course_name);
+            if (id != "-1")
+                return new JsonResult(new Header
+                {
+                    code = -3,
+                    message = "数据库中已存在同名课程"
+                });
             Course course = new Course
             {
-                CourseId = course_id,
                 Comprehension = comprehension,
                 CourseName = course_name,
                 PicUrl = pic_url
@@ -312,8 +343,7 @@ namespace StudyPlat.Controllers
                     message = "该专业已存在"
                 });
             }
-            major_id = mMajor.GenerateID();
-            int num = mMajor.AddMajor(major_id, major_name);
+            int num = mMajor.AddMajor(major_name);
             string message;
             if(num == 0)
             {
@@ -329,5 +359,136 @@ namespace StudyPlat.Controllers
                 message = message
             });
         }
+        /// <summary>
+        /// 删去特定专业的api，参数:major_id
+        /// </summary>
+        /// <reamrks>
+        /// 返回信息示例 :
+        /// 
+        ///     Delete/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "删除对应专业成功"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:删除对应专业成功
+        /// -1:不存在相应的专业，请检查后再试
+        /// -2:数据库操作出现问题，请检查相关代码后再次尝试
+        /// </reamrks>
+        /// <param name="major_id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteMajor(string major_id)
+        {
+            MMajor mMajor = new MMajor(_context);
+            Major major = mMajor.GetMajor(major_id);
+            if(major.MajorId == "-1")//说明不存在对应的major
+            {
+                return new JsonResult(new Header
+                {
+                    code = -1,
+                    message = "不存在相应的专业，请检查后再试"
+                });
+            }
+
+            try
+            {
+                _context.Remove(major);
+                _context.SaveChanges();
+                return new JsonResult(new Header
+                {
+                    code = 0,
+                    message = "删除对应专业成功"
+                });
+            }
+            catch
+            {
+                return new JsonResult(new Header
+                {
+                    code = -2,
+                    message = "数据库操作出现问题，请检查相关代码后再次尝试"
+                });
+            }
+        }
+        /// <summary>
+        /// 删除书本的api，参数;isbn
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Delete/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "删除对应书籍成功"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:删除对应书籍成功
+        /// -1:不存在对应的书籍
+        /// -2:数据库出现问题，请检查代码后再次尝试该操作
+        /// </remarks>
+        /// <param name="isbn"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteBook(string isbn)
+        {
+            MBook mBook = new MBook(_context);
+            Book book = mBook.GetBook(isbn);
+            if(book.Isbn == "-1")
+            {
+                return new JsonResult(new Header
+                {
+                    code = -1,
+                    message = "不存在对应的书籍"
+                });
+            }
+
+            try
+            {
+                _context.Remove(book);
+                _context.SaveChanges();
+                return new JsonResult(new Header
+                {
+                    code = 0,
+                    message = "删除对应书籍成功"
+                });
+            }
+            catch
+            {
+                return new JsonResult(new Header
+                {
+                    code = -2,
+                    message = "数据库出现问题，请检查代码后再次尝试该操作"
+                });
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAnswer(string answer_id)
+        {
+            MAnswer mAnswer = new MAnswer(_context);
+            int num = mAnswer.DeleteAnswer(answer_id);
+            string message;
+            if(num == 0)
+            {
+                message = "成功删除对应答案";
+            }
+            else if(num == -1)
+            {
+                message = "不存在相应的答案";
+            }
+            else
+            {
+                message = "数据库操作出现问题，请检查相关代码";
+            }
+
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
     }
 }
+

@@ -16,11 +16,19 @@ namespace StudyPlat.Models
             _context = context;
         }
 
-        public string GenerateID()
+        public string FindAnswer(string answer_content)
         {
             IQueryable<Answer> answers = _context.Answer;
-            return (answers.Count() + 1).ToString();
+            answers = answers.Where(u => u.AnswerContent == answer_content);
+            int num = answers.Count();
+            if (num == 1)
+                return answers.First().AnswerId;
+            else if (num == 0)
+                return "-1";//没找到
+            else
+                return "-2";//出现了多于1的answer
         }
+
         public Answer GetAnswer(string answer_id)
         {
             IQueryable<Answer> answers = _context.Answer;
@@ -65,22 +73,34 @@ namespace StudyPlat.Models
             explainQuestions = explainQuestions.Where(u => u.AnswerId == answer_id);
             return explainQuestions.First().QuestionId;
         }
-        public void AnswerQuestion(string answer_id,string question_id,string answer_content,string expert_id)
+        public int AnswerQuestion(string question_id,string answer_content,string expert_id)
         {
+            string valid = this.FindAnswer(answer_content);
+            if (valid != "-1" && valid != "-2")
+                return -2;//说明已经有内容相同的答案
             IQueryable<Question> questions = _context.Question;
             questions = questions.Where(u => u.QuestionId == question_id);
             Question question = questions.First();
             question.Status = true;
+            Answer answer = new Answer
+            {
+                AnswerContent = answer_content
+            };
+            try
+            {
+                _context.Add(answer);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return -1;//数据库出现问题
+            }
+            string answer_id = this.FindAnswer(answer_content);
             GiveAnswer giveAnswer = new GiveAnswer
             {
                 ExpertId = expert_id,
                 AdditionDate = DateTime.Now,
                 AnswerId = answer_id
-            };
-            Answer answer = new Answer
-            {
-                AnswerId = answer_id,
-                AnswerContent = answer_content
             };
             ExplainQuestion explainQuestion = new ExplainQuestion
             {
@@ -88,11 +108,39 @@ namespace StudyPlat.Models
                 AnswerId = answer_id,
                 CreateTime = DateTime.Now,
             };
-            _context.Add(giveAnswer);
-            _context.Add(answer);
-            _context.Add(explainQuestion);
-            _context.Update(question);
-            _context.SaveChanges();
+            try
+            {
+                _context.Add(giveAnswer);
+                _context.Add(explainQuestion);
+                _context.Update(question);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -1;//数据库出现问题
+            }
+        }
+
+        public int DeleteAnswer(string answer_id)
+        {
+            IQueryable<Answer> answers = _context.Answer;
+            answers = answers.Where(u => u.AnswerId == answer_id);
+            int num = answers.Count();
+            if (num == 0)
+                return -1;//不存在相应的答案
+            try
+            {
+                Answer answer = answers.First();
+                _context.Remove(answer);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -2;//数据库操作出现错误
+            }
+
         }
     }
 }
