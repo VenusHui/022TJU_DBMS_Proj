@@ -60,7 +60,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.AnswerId)
                     .HasColumnName("answer_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_ANSWER.nextval");
 
                 entity.Property(e => e.AnswerContent)
                     .HasColumnName("answer_content")
@@ -234,7 +235,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.CourseId)
                     .HasColumnName("course_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_COURSE.nextval");
 
                 entity.Property(e => e.Comprehension)
                     .HasColumnName("comprehension")
@@ -332,7 +334,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.FeedbackId)
                     .HasColumnName("feedback_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_FEEDBACK.nextval");
 
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
@@ -519,7 +522,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.MajorId)
                     .HasColumnName("major_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_MAJOR.nextval");
 
                 entity.Property(e => e.MajorName)
                     .HasColumnName("major_name")
@@ -534,7 +538,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.QuestionId)
                     .HasColumnName("question_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_QUESTION.nextval");
 
                 entity.Property(e => e.PicUrl)
                     .HasColumnName("pic_url")
@@ -649,7 +654,8 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.UserId)
                     .HasColumnName("user_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("SEQ_USER.nextval");
 
                 entity.Property(e => e.MajorId)
                     .HasColumnName("major_id")
@@ -681,6 +687,18 @@ namespace StudyPlat.Entities
                     .HasColumnName("user_type")
                     .HasColumnType("NUMBER(4)");
             });
+
+            modelBuilder.HasSequence("SEQ_ANSWER");
+
+            modelBuilder.HasSequence("SEQ_COURSE");
+
+            modelBuilder.HasSequence("SEQ_FEEDBACK");
+
+            modelBuilder.HasSequence("SEQ_MAJOR");
+
+            modelBuilder.HasSequence("SEQ_QUESTION");
+
+            modelBuilder.HasSequence("SEQ_USER");
 
             OnModelCreatingPartial(modelBuilder);
         }

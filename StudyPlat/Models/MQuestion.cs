@@ -23,10 +23,13 @@ namespace StudyPlat.Models
         public string findQuestion(string question_stem)
         {
             IQueryable<Question> questions = _context.Question;
-            questions = questions.Where(u => u.QuestionStem == question_stem);
+            questions = questions.Where(u => u.QuestionStem.Contains(question_stem));
             try
             {
-                return questions.First().QuestionId;
+                if (questions.Count() == 1)
+                    return questions.First().QuestionId;
+                else
+                    return "-1";
             }
             catch
             {

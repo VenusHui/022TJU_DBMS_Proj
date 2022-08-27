@@ -10,7 +10,7 @@ namespace StudyPlat.Entities
     public partial class FeedbackInfo
     {
         public string FeedbackId { get; set; }
-        public byte ProblemType { get; set; }
+        public byte? ProblemType { get; set; }
         public string Content { get; set; }
         public DateTime PostTime { get; set; }
         public string Replay { get; set; }
