@@ -55,7 +55,7 @@ namespace StudyPlat.Controllers
         [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id" })]
         public IActionResult GetQuestion(string question_id)
         {
-            lock(obj)
+            lock (obj)
             {
                 MQuestion mQuestion = new MQuestion(_context);
                 MAnswer mAnswer = new MAnswer(_context);
@@ -94,7 +94,7 @@ namespace StudyPlat.Controllers
                         pic_url = question.PicUrl,
                         answer_id_list = answerIdList,
                         question_id = question.QuestionId,
-                        post_time = question.PostTime  
+                        post_time = question.PostTime
                     }
                 });
             }
@@ -131,7 +131,7 @@ namespace StudyPlat.Controllers
         [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "answer_id" })]
         public IActionResult GetAnswer([FromQuery] string answer_id)
         {
-            lock(obj)
+            lock (obj)
             {
                 MAnswer mAnswer = new MAnswer(_context);
                 Answer answer = mAnswer.GetAnswer(answer_id);
@@ -205,7 +205,7 @@ namespace StudyPlat.Controllers
         [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "isbn" })]
         public IActionResult GetBook([FromQuery] string isbn)
         {
-            lock(obj)
+            lock (obj)
             {
                 MBook mBook = new MBook(_context);
                 Book book = mBook.GetBook(isbn);
@@ -282,10 +282,10 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration =10 , VaryByQueryKeys =new string[] { "course_id"})]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "course_id" })]
         public IActionResult GetCourse([FromQuery] string course_id)
         {
-            lock(obj)
+            lock (obj)
             {
                 MCourse mCourse = new MCourse(_context);
                 Course course = mCourse.GetCourse(course_id);
@@ -352,11 +352,11 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] {"text" })]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "text" })]
         public IActionResult QueryQuestion([FromQuery] string text)
         {
             //查找的结果为所有可能对应的题目的id
-            lock(obj)
+            lock (obj)
             {
                 MQuestion mQuestion = new MQuestion(_context);
                 List<string> questionList = mQuestion.QueryQuestion(text);
@@ -402,10 +402,10 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys =new string[]{"text"})]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "text" })]
         public IActionResult QueryBook([FromQuery] string text)
         {
-            lock(obj)
+            lock (obj)
             {
                 MBook mBook = new MBook(_context);
                 List<string> bookList = mBook.QueryBook(text);
@@ -449,10 +449,10 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10 , VaryByQueryKeys = new string[] { "text"})]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "text" })]
         public IActionResult QueryCourse([FromQuery] string text)
         {
-            lock(obj)
+            lock (obj)
             {
                 MCourse mCourse = new MCourse(_context);
                 List<string> IdList = mCourse.QueryCourse(text);
@@ -499,9 +499,9 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult QueryCollectionQuestion([FromQuery]string user_id,[FromQuery]string text)
+        public IActionResult QueryCollectionQuestion([FromQuery] string user_id, [FromQuery] string text)
         {
-            lock(obj)
+            lock (obj)
             {
                 MQuestion mQuestion = new MQuestion(_context);
                 List<string> QueryQuestionIDList = mQuestion.QueryCollectionQuestion(user_id, text);
@@ -562,9 +562,9 @@ namespace StudyPlat.Controllers
         /// <returns></returns>
 
         [HttpGet]
-        public IActionResult QueryCollectionBook(string user_id,string text)
+        public IActionResult QueryCollectionBook(string user_id, string text)
         {
-            lock(obj)
+            lock (obj)
             {
                 MBook mBook = new MBook(_context);
                 List<string> QueryBookIDList = mBook.QueryBookCollection(user_id, text);
@@ -728,7 +728,7 @@ namespace StudyPlat.Controllers
         [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
         public IActionResult GetCollectionBook([FromQuery] string user_id)
         {
-            lock(obj)
+            lock (obj)
             {
                 MBook mBook = new MBook(_context);
                 string[] bookIdCollection = new string[50];
@@ -771,7 +771,8 @@ namespace StudyPlat.Controllers
         [HttpGet]
         [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
         public IActionResult GetCollectionCourse([FromQuery] string user_id)
-        {lock (obj)
+        {
+            lock (obj)
             {
                 MCourse mCourse = new MCourse(_context);
                 string[] courseIdCollection = new string[50];
@@ -806,7 +807,7 @@ namespace StudyPlat.Controllers
         [HttpGet]
         public IActionResult GetQuestionForExpert(string expert_id)
         {
-            lock(obj)
+            lock (obj)
             {
                 MUser mUser = new MUser(_context);
                 MMajor mMajor = new MMajor(_context);
@@ -856,7 +857,7 @@ namespace StudyPlat.Controllers
         [HttpGet]
         public IActionResult GetMajorInfo()
         {
-            lock(obj)
+            lock (obj)
             {
                 MMajor mMajor = new MMajor(_context);
                 List<string> IDList = mMajor.GetMajorID();
@@ -907,12 +908,12 @@ namespace StudyPlat.Controllers
         [HttpGet]
         public IActionResult GetCourseByMajor(string major_name)
         {
-            lock(obj)
+            lock (obj)
             {
                 MMajor mMajor = new MMajor(_context);
                 MCourse mCourse = new MCourse(_context);
                 string major_id = mMajor.FindMajor(major_name);
-                if(major_name == null)
+                if (major_name == null)
                 {
                     return new JsonResult(new QueryMessage
                     {
@@ -990,7 +991,7 @@ namespace StudyPlat.Controllers
         [HttpGet]
         public IActionResult GetBookByMajor(string major_name)
         {
-            lock(obj)
+            lock (obj)
             {
                 MMajor mMajor = new MMajor(_context);
                 MCourse mCourse = new MCourse(_context);
@@ -1012,7 +1013,7 @@ namespace StudyPlat.Controllers
                     });
                 }
                 string major_id = mMajor.FindMajor(major_name);
-                if(major_id == "-1")
+                if (major_id == "-1")
                 {
                     return new JsonResult(new QueryMessage
                     {
@@ -1030,7 +1031,7 @@ namespace StudyPlat.Controllers
                 else if (major_id == "0")
                 {
                     IQueryable<Book> books = _context.Book;
-                    foreach(var row in books)
+                    foreach (var row in books)
                     {
                         ISBNList.Add(row.Isbn);
                     }
@@ -1052,11 +1053,11 @@ namespace StudyPlat.Controllers
                 ISBNList = mBook.GetBookByCourse(courseIDList);
                 int num = ISBNList.Count();
                 //对ISBNList进行去重
-                for(int i = 0; i < num; i++)
+                for (int i = 0; i < num; i++)
                 {
-                    for(int j = i+1; j < num; j++)
+                    for (int j = i + 1; j < num; j++)
                     {
-                        if(ISBNList[j] == ISBNList[i])
+                        if (ISBNList[j] == ISBNList[i])
                         {
                             ISBNList.RemoveAt(j);
                             num--;
@@ -1077,7 +1078,30 @@ namespace StudyPlat.Controllers
                 });
             }
         }
-
-
+        [HttpGet]
+        public IActionResult RecommendForCourse(string course_id)
+        {
+            lock(obj)//防止上下文冲突
+            {
+                List<string> isbnList = new List<string> { };
+                List<string> questionIDList = new List<string> { };
+                MCourse mCourse = new MCourse(_context);
+                isbnList = mCourse.RecommendBook(course_id);
+                questionIDList = mCourse.RecommendQuestion(course_id);
+                return new JsonResult(new RecommendMessage
+                { 
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获得课程对应的推荐书籍和题目成功"
+                    },
+                    data = new RecommendData
+                    {
+                        isbnList = isbnList,
+                        questionIDList = questionIDList
+                    }
+                });
+            }            
+        }//end of RecommendForCourse lock
     }
 }

@@ -226,5 +226,28 @@ namespace StudyPlat.Models
                 return -1;
             }
         }
+
+        public List<string> RecommendBook(string course_id)
+        {//推荐书籍
+            List<string> isbnList = new List<string> { };
+            IQueryable<HasBook> hasBooks = _context.HasBook;
+            hasBooks = hasBooks.Where(u => u.CourseId == course_id);
+            foreach(var row in hasBooks)
+            {
+                isbnList.Add(row.Isbn);
+            }
+            return isbnList;
+        }
+        public List<string> RecommendQuestion(string course_id)
+        {//推荐题目
+            List<string> questionIDList = new List<string> { };
+            IQueryable<QuestionFromCourse> questionFromCourses= _context.QuestionFromCourse;
+            questionFromCourses = questionFromCourses.Where(u => u.CourseId == course_id);
+            foreach (var row in questionFromCourses)
+            {
+                questionIDList.Add(row.QuestionId);
+            }
+            return questionIDList;
+        }
     }
 }

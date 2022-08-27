@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>E:\数据库课设\StudyPlat\StudyPlat\StudyPlat.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\Thory\source\repos\StudyPlat\StudyPlat\StudyPlat.xml</DocumentationFile>
   </PropertyGroup>
 
 <PropertyGroup>

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\数据库课设\\StudyPlat\\StudyPlat\\StudyPlat.csproj": {}
+    "C:\\Users\\Thory\\source\\repos\\StudyPlat\\StudyPlat\\StudyPlat.csproj": {}
   },
   "projects": {
-    "E:\\数据库课设\\StudyPlat\\StudyPlat\\StudyPlat.csproj": {
+    "C:\\Users\\Thory\\source\\repos\\StudyPlat\\StudyPlat\\StudyPlat.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\数据库课设\\StudyPlat\\StudyPlat\\StudyPlat.csproj",
+        "projectUniqueName": "C:\\Users\\Thory\\source\\repos\\StudyPlat\\StudyPlat\\StudyPlat.csproj",
         "projectName": "StudyPlat",
-        "projectPath": "E:\\数据库课设\\StudyPlat\\StudyPlat\\StudyPlat.csproj",
-        "packagesPath": "C:\\Users\\sayrol\\.nuget\\packages\\",
-        "outputPath": "E:\\数据库课设\\StudyPlat\\StudyPlat\\obj\\",
+        "projectPath": "C:\\Users\\Thory\\source\\repos\\StudyPlat\\StudyPlat\\StudyPlat.csproj",
+        "packagesPath": "C:\\Users\\Thory\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Thory\\source\\repos\\StudyPlat\\StudyPlat\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sayrol\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Thory\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,20 +43,6 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[3.1.28, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[3.1.27, )"
-            },
-            "Microsoft.EntityFrameworkCore.InMemory": {
-              "target": "Package",
-              "version": "[3.1.27, )"
-            },
-            "Microsoft.EntityFrameworkCore.Relational": {
-              "target": "Package",
-              "version": "[3.1.27, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -95,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

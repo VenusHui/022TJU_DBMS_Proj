@@ -17,4 +17,14 @@ namespace StudyPlat.Message
         public QueryData data { get; set; }
 
     }
+    public class RecommendData
+    {
+        public List<string> isbnList { set; get; }
+        public List<string> questionIDList { set; get; }
+    }
+    public class RecommendMessage
+    {
+        public Header header { get; set; }
+        public RecommendData data { get; set; }
+    }
 }
