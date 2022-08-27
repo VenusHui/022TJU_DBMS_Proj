@@ -19,7 +19,7 @@ namespace StudyPlat.Models
         public string FindAnswer(string answer_content)
         {
             IQueryable<Answer> answers = _context.Answer;
-            answers = answers.Where(u => u.AnswerContent == answer_content);
+            answers = answers.Where(u => u.AnswerContent.Contains(answer_content));
             int num = answers.Count();
             if (num == 1)
                 return answers.First().AnswerId;
