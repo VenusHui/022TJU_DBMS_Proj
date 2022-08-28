@@ -359,6 +359,7 @@ namespace StudyPlat.Controllers
                 message = message
             });
         }
+
         /// <summary>
         /// 删去特定专业的api，参数:major_id
         /// </summary>
@@ -374,7 +375,8 @@ namespace StudyPlat.Controllers
         /// code对应情况:
         /// 0:删除对应专业成功
         /// -1:不存在相应的专业，请检查后再试
-        /// -2:数据库操作出现问题，请检查相关代码后再次尝试
+        /// -2:删除专业对应的课程/书本/题目/回答信息出错
+        /// -3:数据库操作出现问题，请检查相关代码后再次尝试
         /// </reamrks>
         /// <param name="major_id"></param>
         /// <returns></returns>
@@ -391,26 +393,21 @@ namespace StudyPlat.Controllers
                     message = "不存在相应的专业，请检查后再试"
                 });
             }
-
-            try
+            int num = mMajor.DeleteMajor(major_id);
+            string message;
+            if (num == 0)
+                message = "删除对应专业成功";
+            else if (num == -2)
+                message = "删除专业对应的课程/书本/题目/回答信息出错";
+            else
+                message = "数据库操作出现问题，请检查相关代码后再次尝试";
+            return new JsonResult(new Header
             {
-                _context.Remove(major);
-                _context.SaveChanges();
-                return new JsonResult(new Header
-                {
-                    code = 0,
-                    message = "删除对应专业成功"
-                });
-            }
-            catch
-            {
-                return new JsonResult(new Header
-                {
-                    code = -2,
-                    message = "数据库操作出现问题，请检查相关代码后再次尝试"
-                });
-            }
+                code = num,
+                message = message
+            });
         }
+
         /// <summary>
         /// 删除书本的api，参数;isbn
         /// </summary>
@@ -430,6 +427,8 @@ namespace StudyPlat.Controllers
         /// </remarks>
         /// <param name="isbn"></param>
         /// <returns></returns>
+        /// 
+
         [HttpDelete]
         public IActionResult DeleteBook(string isbn)
         {
@@ -443,27 +442,40 @@ namespace StudyPlat.Controllers
                     message = "不存在对应的书籍"
                 });
             }
-
-            try
+            int num = mBook.DeleteBook(isbn);
+            string message;
+            if (num == 0)
+                message = "成功删除书籍";
+            else if (num == -2)
+                message = "在删除相关题目/答案时出错";
+            else
+                message = "数据库相关操作出错";
+            return new JsonResult(new Header
             {
-                _context.Remove(book);
-                _context.SaveChanges();
-                return new JsonResult(new Header
-                {
-                    code = 0,
-                    message = "删除对应书籍成功"
-                });
-            }
-            catch
-            {
-                return new JsonResult(new Header
-                {
-                    code = -2,
-                    message = "数据库出现问题，请检查代码后再次尝试该操作"
-                });
-            }
+                code = num,
+                message = message
+            });
         }
 
+        /// <summary>
+        /// 删除答案，参数answer_id
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Delete/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "成功删除对应答案"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:成功删除对应答案
+        /// -1:不存在相应的答案
+        /// -2:数据库操作出现问题，请检查相关代码
+        /// </remarks>
+        /// <param name="answer_id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public IActionResult DeleteAnswer(string answer_id)
         {
@@ -483,6 +495,94 @@ namespace StudyPlat.Controllers
                 message = "数据库操作出现问题，请检查相关代码";
             }
 
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
+        /// <summary>
+        /// 删除问题，参数:question_id
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Delete/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "成功删除对应答案"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:成功删除对应问题
+        /// -1:不存在对应的问题，请检查参数
+        /// -2:在删除问题所对应的答案时出错
+        /// -3:数据库操作出现问题，请检查相关代码
+        /// </remarks>
+        /// <param name="question_id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteQuestion(string question_id)
+        {
+            MQuestion mQuestion = new MQuestion(_context);
+            int num = mQuestion.DeleteQuestion(question_id);
+            string message;
+            if (num == 0)
+                message = "成功删除对应问题";
+            else if (num == -1)
+                message = "不存在对应的问题，请检查参数";
+            else if (num == -2)
+                message = "在删除问题所对应的答案时出错";
+            else
+                message = "数据库操作出现问题，请检查相关代码";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
+
+        /// <summary>
+        /// 删除课程的接口，参数:course_id
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Delete/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "成功删除对应课程"
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:成功删除相关课程
+        /// -1:不存在对应的课程，请检查参数
+        /// -2:在删除相关书籍/问题/答案时出现错误
+        /// -3:数据库相关操作出现错误
+        /// </remarks>
+        /// <param name="course_id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteCourse(string course_id)
+        {
+            MCourse mCourse = new MCourse(_context);
+            Course course = mCourse.GetCourse(course_id);
+            if(course.CourseId == "-1")
+            {
+                return new JsonResult(new Header
+                {
+                    code = -1,
+                    message = "不存在对应的课程，请检查参数"
+                });
+            }
+            int num = mCourse.DeleteCourse(course_id);
+            string message;
+            if (num == 0)
+                message = "成功删除相关课程";
+            else if (num == -2)
+                message = "在删除相关书籍/问题/答案时出现错误";
+            else
+                message = "数据库相关操作出现错误";
             return new JsonResult(new Header
             {
                 code = num,

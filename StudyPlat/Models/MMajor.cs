@@ -107,5 +107,36 @@ namespace StudyPlat.Models
                 return -2;
             }
         }
+
+        public int DeleteMajor(string major_id)
+        {
+            MCourse mCourse = new MCourse(_context);
+            IQueryable<CourseFromMajor> courseFromMajors = _context.CourseFromMajor;
+            IQueryable<Major> majors = _context.Major;
+            List<string> courseIDList = new List<string> { };
+            courseFromMajors = courseFromMajors.Where(u => u.MajorId == major_id);
+            foreach (var row in courseFromMajors)
+            {
+                courseIDList.Add(row.CourseId);
+            }
+            foreach(var id in courseIDList)
+            {
+                int num = mCourse.DeleteCourse(id);
+                if (num != 0)
+                    return -2;
+            }
+            majors = majors.Where(u => u.MajorId == major_id);
+            Major major = majors.First();
+            try
+            {
+                _context.Major.Remove(major);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -3;
+            }
+        }
     }
 }

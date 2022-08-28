@@ -21,6 +21,7 @@ namespace StudyPlat.Message
     {
         public List<string> isbnList { set; get; }
         public List<string> questionIDList { set; get; }
+        public List<string> courseIDList { set; get; }
     }
     public class RecommendMessage
     {

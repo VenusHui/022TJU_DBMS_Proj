@@ -248,5 +248,41 @@ namespace StudyPlat.Models
             return questions.First().Status;
         }
 
+        public int DeleteQuestion(string question_id)
+        {
+            IQueryable<ExplainQuestion> explainQuestions = _context.ExplainQuestion;
+            IQueryable<Question> questions = _context.Question;
+            questions = questions.Where(u => u.QuestionId == question_id);
+            int count = questions.Count();
+            if (count != 1)
+                return -1;
+            Question question1 = questions.First();
+            List<string> answerList = new List<string> { };
+            MAnswer mAnswer = new MAnswer(_context);
+            explainQuestions = explainQuestions.Where(u => u.QuestionId == question_id);
+            foreach(var row in explainQuestions)
+            {
+                answerList.Add(row.AnswerId);
+            }
+            foreach(var id in answerList)
+            {
+                int num = mAnswer.DeleteAnswer(id);
+                if(num != 0)
+                {
+                    return -2;//说明删除答案时出错了
+                }
+            }
+            try
+            {
+                _context.Question.Remove(question1);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -3;
+            }
+        }
+
     }
 }

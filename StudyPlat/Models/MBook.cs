@@ -216,5 +216,59 @@ namespace StudyPlat.Models
             }
             return ISBNList;
         }
+
+        public List<string> RecommendCourse(string isbn)
+        {//推荐课程
+            List<string> courseIDList = new List<string> { };
+            IQueryable<HasBook> hasBooks = _context.HasBook;
+            hasBooks = hasBooks.Where(u => u.Isbn == isbn);
+            foreach (var row in hasBooks)
+            {
+                courseIDList.Add(row.CourseId);
+            }
+            return courseIDList;
+        }
+        public List<string> RecommendQuestion(string isbn)
+        {//推荐题目
+            List<string> questionIDList = new List<string> { };
+            IQueryable<QuestionFromBook> questionFromBook = _context.QuestionFromBook;
+            questionFromBook = questionFromBook.Where(u => u.Isbn == isbn);
+            foreach (var row in questionFromBook)
+            {
+                questionIDList.Add(row.QuestionId);
+            }
+            return questionIDList;
+        }
+
+        public int DeleteBook(string isbn)
+        {
+            IQueryable<QuestionFromBook> questionFromBooks = _context.QuestionFromBook;
+            IQueryable<Book> books = _context.Book;
+            MQuestion mQuestion = new MQuestion(_context);
+            List<string> questionIDList = new List<string> { };
+            questionFromBooks = questionFromBooks.Where(u => u.Isbn == isbn);
+            foreach(var row in questionFromBooks)
+            {
+                questionIDList.Add(row.QuestionId);
+            }
+            foreach(var id in questionIDList)
+            {
+                int num = mQuestion.DeleteQuestion(id);
+                if (num != 0)
+                    return -2;//在删除相关题目/答案时出错
+            }
+            books = books.Where(u => u.Isbn == isbn);
+            Book book = books.First();
+            try
+            {
+                _context.Book.Remove(book);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -3;//数据库相关操作出错
+            }
+        }
     }
 }

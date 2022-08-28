@@ -637,13 +637,11 @@ namespace StudyPlat.Entities
                 entity.HasOne(d => d.Major)
                     .WithMany(p => p.QuestionFromMajor)
                     .HasForeignKey(d => d.MajorId)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("SYS_C0010567");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.QuestionFromMajor)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("SYS_C0010568");
             });
 

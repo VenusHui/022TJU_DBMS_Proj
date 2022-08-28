@@ -249,5 +249,35 @@ namespace StudyPlat.Models
             }
             return questionIDList;
         }
+        public int DeleteCourse(string course_id)
+        {
+            IQueryable<HasBook> hasBooks = _context.HasBook;
+            IQueryable<Course> courses = _context.Course;
+            List<string> BookList = new List<string> { };
+            MBook mBook = new MBook(_context);
+            hasBooks = hasBooks.Where(u => u.CourseId == course_id);
+            foreach(var row in hasBooks)
+            {
+                BookList.Add(row.Isbn);
+            }
+            foreach(var isbn in BookList)
+            {
+                int num = mBook.DeleteBook(isbn);
+                if (num != 0)
+                    return -2;//在删除相关书籍/问题/答案时出现错误
+            }
+            courses = courses.Where(u => u.CourseId == course_id);
+            Course course = courses.First();
+            try
+            {
+                _context.Remove(course);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -3;// 数据库相关操作出现错误
+            }
+        }
     }
 }

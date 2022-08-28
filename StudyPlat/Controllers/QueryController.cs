@@ -906,6 +906,7 @@ namespace StudyPlat.Controllers
         /// <param name="major_name"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "major_name" })]
         public IActionResult GetCourseByMajor(string major_name)
         {
             lock (obj)
@@ -989,6 +990,7 @@ namespace StudyPlat.Controllers
         /// <param name="major_name"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "major_name" })]
         public IActionResult GetBookByMajor(string major_name)
         {
             lock (obj)
@@ -1078,7 +1080,32 @@ namespace StudyPlat.Controllers
                 });
             }
         }
+        /// <summary>
+        /// 用于课程详情，根据课程id获得相关书籍ISBN的List和题目id的List，参数:course_id
+        /// </summary>
+        /// <param name="course_id"></param>
+        /// <returns>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获得课程对应的推荐书籍和题目成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "isbnList" : ["1"],
+        ///             "questionIDList" : ["1"],
+        ///         }
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:获得对应课程的推荐内容成功
+        /// </returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "course_id" })]
         public IActionResult RecommendForCourse(string course_id)
         {
             lock(obj)//防止上下文冲突
@@ -1103,5 +1130,55 @@ namespace StudyPlat.Controllers
                 });
             }            
         }//end of RecommendForCourse lock
+        /// <summary>
+        /// 用于书籍详情，根据isbn获得相关课程id的List和题目id的List，参数:isbn
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <returns>
+        /// 返回信息实例:
+        /// 
+        ///     Get/Sample:
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获得书籍对应的推荐课程和题目成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "courseIDListList" : ["1"],
+        ///             "questionIDList" : ["1"],
+        ///         }
+        ///     }
+        ///     
+        /// code对应情况:
+        /// 0:获得对应书籍的推荐内容成功
+        /// </returns>
+        [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "isbn" })]
+        public IActionResult RecommendForBook(string isbn)
+        {
+            lock (obj)//防止上下文冲突
+            {
+                List<string> courseIDList = new List<string> { };
+                List<string> questionIDList = new List<string> { };
+                MBook mbook = new MBook(_context);
+                courseIDList = mbook.RecommendCourse(isbn);
+                questionIDList = mbook.RecommendQuestion(isbn);
+                return new JsonResult(new RecommendMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获得书籍对应的推荐课程和题目成功"
+                    },
+                    data = new RecommendData
+                    {
+                        courseIDList = courseIDList,
+                        questionIDList = questionIDList
+                    }
+                });
+            }
+        }//end of RecommendForBook lock
     }
 }
