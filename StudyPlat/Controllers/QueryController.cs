@@ -16,7 +16,7 @@ namespace StudyPlat.Controllers
     public class QueryController : ControllerBase
     {
         private readonly ModelContext _context;
-        private static object obj = new object();
+        public static object obj = new object();
         public QueryController(ModelContext context)
         {
             _context = context;
@@ -118,7 +118,9 @@ namespace StudyPlat.Controllers
         ///         "data":
         ///         {
         ///             "answer_content" : "这道题目的解答思路是",
-        ///             "answer_id": "001"
+        ///             "answer_id": "001",
+        ///             "expert_name": "数学专家",
+        ///             "approve" : 0
         ///         }
         ///     }
         ///  code对应的情况:

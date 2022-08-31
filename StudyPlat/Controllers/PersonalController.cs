@@ -49,32 +49,34 @@ namespace StudyPlat.Controllers
         [HttpGet]
         public IActionResult GetPersonalInformation(string user_id)//通过user_id来获得个人信息
         {
-            MUser mUser = new MUser(_context);
-
-            User user = mUser.findUser(user_id);
-            string major_id = user.MajorId;
-            MMajor mMajor = new MMajor(_context);
-            string major_name = mMajor.GetMajor(major_id).MajorName;
-            if (major_name == "-1")
-                major_name = null;
-
-            JsonResult result = new JsonResult(new PersonalMessage
+            lock(QueryController.obj)
             {
-                header = new Header
-                {
-                    code = 0,
-                    message = "个人信息获取成功"
-                },
-                personalInformation = new PersonalInformation
-                {
-                    user_name = user.UserName,
-                    school = user.SchoolName,
-                    major_name = major_name,
-                    phone_number = user.PhoneNumber
-                }
-            });
-            return result;
+                MUser mUser = new MUser(_context);
 
+                User user = mUser.findUser(user_id);
+                string major_id = user.MajorId;
+                MMajor mMajor = new MMajor(_context);
+                string major_name = mMajor.GetMajor(major_id).MajorName;
+                if (major_name == "-1")
+                    major_name = null;
+
+                JsonResult result = new JsonResult(new PersonalMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "个人信息获取成功"
+                    },
+                    personalInformation = new PersonalInformation
+                    {
+                        user_name = user.UserName,
+                        school = user.SchoolName,
+                        major_name = major_name,
+                        phone_number = user.PhoneNumber
+                    }
+                });
+                return result;
+            }
         }
         /// <summary>
         /// 修改个人信息，参数:user_id,同时使用表单进行个人数据的修改，Key:user_name/school/major_id
@@ -136,7 +138,8 @@ namespace StudyPlat.Controllers
             }
 
             user.UserName = name;
-            user.SchoolName = school;
+            if(school != null)
+                user.SchoolName = school;
             if(major_name != null)
                 user.MajorId = major_id;
 
