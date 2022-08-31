@@ -115,5 +115,26 @@ namespace StudyPlat.Models
                 return -1;//数据库有问题
             }
         }
+        public int AddExpert(User expert)
+        {
+            string major_id = expert.MajorId;
+            string expert_id = expert.UserId;
+            HasExpert hasExperts = new HasExpert
+            {
+                ExpertId = expert_id,
+                MajorId = major_id
+            };
+            try
+            {
+                _context.User.Add(expert);
+                _context.HasExpert.Add(hasExperts);
+                _context.SaveChanges();
+                return 0;
+            }
+            catch
+            {
+                return -4;
+            }
+        }
     }
 }

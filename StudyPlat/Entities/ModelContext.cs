@@ -70,6 +70,10 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.AnswerSupplement)
                     .HasColumnName("answer_supplement")
                     .HasColumnType("BLOB");
+
+                entity.Property(e => e.Approve)
+                    .HasColumnName("approve")
+                    .HasColumnType("NUMBER(35)");
             });
 
             modelBuilder.Entity<Book>(entity =>
@@ -143,7 +147,6 @@ namespace StudyPlat.Entities
                 entity.HasOne(d => d.IsbnNavigation)
                     .WithMany(p => p.CollectionBook)
                     .HasForeignKey(d => d.Isbn)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("SYS_C0010381");
 
                 entity.HasOne(d => d.User)
@@ -181,7 +184,6 @@ namespace StudyPlat.Entities
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.CollectionCourse)
                     .HasForeignKey(d => d.CourseId)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("SYS_C0010372");
 
                 entity.HasOne(d => d.User)
@@ -219,7 +221,6 @@ namespace StudyPlat.Entities
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.CollectionQuestion)
                     .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("SYS_C0010365");
 
                 entity.HasOne(d => d.User)

@@ -589,6 +589,65 @@ namespace StudyPlat.Controllers
                 message = message
             });
         }
+        /// <summary>
+        /// 在管理员界面增添专家用户的接口表单传参
+        /// key:expert_name/phone_num/password/major_name
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AddExpert()
+        {
+            MUser mUser = new MUser(_context);
+            MMajor mMajor = new MMajor(_context);
+            IFormCollection formParams = HttpContext.Request.Form;
+            string expert_name = formParams["expert_name"];
+            string phone_num = formParams["phone_num"];
+            string password = formParams["password"];
+            string major_name = formParams["major_name"];
+            string expert_id = mUser.GenerateId();
+            IQueryable<User> users = _context.User;
+            int count = users.Where(u => u.PhoneNumber == phone_num).Count();
+            string major_id = mMajor.FindMajor(major_name);
+            if (expert_name == null || phone_num == null || password == null || major_name == null)
+                return new JsonResult(new Header
+                {
+                    code = -2,
+                    message = "专家姓名/电话号码/密码/专业名为空"
+                });
+            if (count != 0)
+                return new JsonResult(new Header
+                {
+                    code = -1,
+                    message = "该电话号已被注册，请更换电话号码后重试"
+                });
+            if (major_id == "-1")
+                return new JsonResult(new Header
+                {
+                    code = -3,
+                    message = "不存在该专业，请检查专业名"
+                });
+
+            User expert = new User
+            {
+                UserId = expert_id,
+                UserName = expert_name,
+                PhoneNumber = phone_num,
+                UserType = 2,
+                Password = password,
+                MajorId = major_id
+            };
+            int num = mUser.AddExpert(expert);
+            string message;
+            if (num == 0)
+                message = "添加专家成功";
+            else
+                message = "数据库相关操作失败，请检查代码及数据库";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
     }
 }
 
