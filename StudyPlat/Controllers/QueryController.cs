@@ -135,6 +135,8 @@ namespace StudyPlat.Controllers
             {
                 MAnswer mAnswer = new MAnswer(_context);
                 Answer answer = mAnswer.GetAnswer(answer_id);
+                string expert_name = mAnswer.GetExpertName(answer_id);
+                decimal? approve = answer.Approve;
                 //查找失败
                 if (answer.AnswerId == "-1")
                 {
@@ -164,7 +166,9 @@ namespace StudyPlat.Controllers
                         data = new AnswerData
                         {
                             answer_content = answer.AnswerContent,
-                            answer_id = answer.AnswerId
+                            answer_id = answer.AnswerId,
+                            expert_name = expert_name,
+                            approve = approve
                         }
                     });
                 }

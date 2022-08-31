@@ -84,7 +84,8 @@ namespace StudyPlat.Models
             question.Status = true;
             Answer answer = new Answer
             {
-                AnswerContent = answer_content
+                AnswerContent = answer_content,
+                Approve = 0
             };
             try
             {
@@ -141,6 +142,64 @@ namespace StudyPlat.Models
                 return -2;//数据库操作出现错误
             }
 
+        }
+
+        public string GetExpertName(string answer_id)
+        {
+            MUser mUser = new MUser(_context);
+            IQueryable<GiveAnswer> giveAnswers = _context.GiveAnswer;
+            giveAnswers = giveAnswers.Where(u => u.AnswerId == answer_id);
+            string expert_id = giveAnswers.First().ExpertId;
+            User expert = mUser.findUser(expert_id);
+            return expert.UserName;
+        }
+
+        public int ApproveAnswer(string answer_id)
+        {
+            IQueryable<Answer> answers = _context.Answer;
+            answers = answers.Where(u => u.AnswerId == answer_id);
+            int num = answers.Count();
+            if (num == 0)
+                return -1;
+            else
+            {
+                Answer answer = answers.First();
+                answer.Approve++;
+                try
+                {
+                    _context.Answer.Update(answer);
+                    _context.SaveChanges();
+                    return 0;
+                }
+                catch
+                {
+                    return -2;
+                }
+            }
+        }
+
+        public int DisApproveAnswer(string answer_id)
+        {
+            IQueryable<Answer> answers = _context.Answer;
+            answers = answers.Where(u => u.AnswerId == answer_id);
+            int num = answers.Count();
+            if (num == 0)
+                return -1;
+            else
+            {
+                Answer answer = answers.First();
+                answer.Approve--;
+                try
+                {
+                    _context.Answer.Update(answer);
+                    _context.SaveChanges();
+                    return 0;
+                }
+                catch
+                {
+                    return -2;
+                }
+            }
         }
     }
 }

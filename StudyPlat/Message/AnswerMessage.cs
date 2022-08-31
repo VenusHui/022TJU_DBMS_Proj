@@ -11,6 +11,8 @@ namespace StudyPlat.Message
         public string answer_id { get; set; }
 
         public string answer_content { get; set; }
+        public string expert_name { get; set; }
+        public decimal? approve { set; get; }
     }
     public class AnswerMessage
     {

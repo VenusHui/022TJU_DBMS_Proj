@@ -648,6 +648,80 @@ namespace StudyPlat.Controllers
                 message = message
             });
         }
+        /// <summary>
+        /// 点赞的api，参数:answer_id
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Post/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "点赞成功"
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:点赞成功
+        /// -1:没有对应的答案，请检查answer_id
+        /// -2:数据库相关操作有误
+        /// </remarks>
+        /// <param name="answer_id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult ApproveAnswer(string answer_id)
+        {
+            MAnswer mAnswer = new MAnswer(_context);
+            int num = mAnswer.ApproveAnswer(answer_id);
+            string message;
+            if (num == 0)
+                message = "点赞成功";
+            else if (num == -1)
+                message = "没有对应的答案，请检查answer_id";
+            else
+                message = "数据库相关操作有误";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
+        /// <summary>
+        /// 点踩的api，参数:answer_id
+        /// </summary>
+        /// <remarks>
+        /// 返回信息示例 :
+        /// 
+        ///     Post/Sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "点踩成功"
+        ///     }
+        ///     
+        /// code对应的情况:
+        /// 0:点踩成功
+        /// -1:没有对应的答案，请检查answer_id
+        /// -2:数据库相关操作有误
+        /// </remarks>
+        /// <param name="answer_id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult DisApproveAnswer(string answer_id)
+        {
+            MAnswer mAnswer = new MAnswer(_context);
+            int num = mAnswer.ApproveAnswer(answer_id);
+            string message;
+            if (num == 0)
+                message = "点踩成功";
+            else if (num == -1)
+                message = "没有对应的答案，请检查answer_id";
+            else
+                message = "数据库相关操作有误";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
     }
 }
 
