@@ -28,8 +28,6 @@ namespace StudyPlat.Entities
         public virtual DbSet<CourseFromMajor> CourseFromMajor { get; set; }
         public virtual DbSet<ExplainQuestion> ExplainQuestion { get; set; }
         public virtual DbSet<FeedbackInfo> FeedbackInfo { get; set; }
-        public virtual DbSet<FeedbackPosting> FeedbackPosting { get; set; }
-        public virtual DbSet<FeedbackReception> FeedbackReception { get; set; }
         public virtual DbSet<GiveAnswer> GiveAnswer { get; set; }
         public virtual DbSet<HasBook> HasBook { get; set; }
         public virtual DbSet<HasExpert> HasExpert { get; set; }
@@ -39,6 +37,7 @@ namespace StudyPlat.Entities
         public virtual DbSet<QuestionFromCourse> QuestionFromCourse { get; set; }
         public virtual DbSet<QuestionFromMajor> QuestionFromMajor { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserApproveAnswer> UserApproveAnswer { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -64,12 +63,9 @@ namespace StudyPlat.Entities
                     .HasDefaultValueSql("SEQ_ANSWER.nextval");
 
                 entity.Property(e => e.AnswerContent)
+                    .IsRequired()
                     .HasColumnName("answer_content")
                     .HasColumnType("CLOB");
-
-                entity.Property(e => e.AnswerSupplement)
-                    .HasColumnName("answer_supplement")
-                    .HasColumnType("BLOB");
 
                 entity.Property(e => e.Approve)
                     .HasColumnName("approve")
@@ -90,12 +86,13 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.Author)
                     .HasColumnName("author")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.BookName)
+                    .IsRequired()
                     .HasColumnName("book_name")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Comprehension)
@@ -113,8 +110,9 @@ namespace StudyPlat.Entities
                     .HasColumnType("TIMESTAMP(6)");
 
                 entity.Property(e => e.Publisher)
+                    .IsRequired()
                     .HasColumnName("publisher")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
@@ -175,11 +173,6 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.CollectTime)
                     .HasColumnName("collect_time")
                     .HasColumnType("TIMESTAMP(6)");
-
-                entity.Property(e => e.Note)
-                    .HasColumnName("note")
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.CollectionCourse)
@@ -246,10 +239,11 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasColumnName("course_name")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.PicUrl)
+                    .IsRequired()
                     .HasColumnName("pic_url")
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -270,11 +264,6 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.CourseId)
                     .HasColumnName("course_id")
                     .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Type)
-                    .HasColumnName("type")
-                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Course)
@@ -308,10 +297,6 @@ namespace StudyPlat.Entities
                 entity.Property(e => e.CreateTime)
                     .HasColumnName("create_time")
                     .HasColumnType("TIMESTAMP(6)");
-
-                entity.Property(e => e.MostCollected).HasColumnName("most_collected");
-
-                entity.Property(e => e.Official).HasColumnName("official");
 
                 entity.HasOne(d => d.Answer)
                     .WithMany(p => p.ExplainQuestion)
@@ -349,79 +334,10 @@ namespace StudyPlat.Entities
                     .HasColumnName("post_time")
                     .HasColumnType("TIMESTAMP(6)");
 
-                entity.Property(e => e.ProblemType)
-                    .HasColumnName("problem_type")
-                    .HasColumnType("NUMBER(4)");
-
                 entity.Property(e => e.Replay)
                     .HasColumnName("replay")
                     .HasMaxLength(1000)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<FeedbackPosting>(entity =>
-            {
-                entity.HasKey(e => e.FeedbackId)
-                    .HasName("SYS_C0010388");
-
-                entity.ToTable("feedback_posting");
-
-                entity.Property(e => e.FeedbackId)
-                    .HasColumnName("feedback_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Feedback)
-                    .WithOne(p => p.FeedbackPosting)
-                    .HasForeignKey<FeedbackPosting>(d => d.FeedbackId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("SYS_C0010390");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.FeedbackPosting)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("SYS_C0010389");
-            });
-
-            modelBuilder.Entity<FeedbackReception>(entity =>
-            {
-                entity.HasKey(e => e.FeedbackId)
-                    .HasName("SYS_C0010391");
-
-                entity.ToTable("feedback_reception");
-
-                entity.Property(e => e.FeedbackId)
-                    .HasColumnName("feedback_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.AdministratorId)
-                    .HasColumnName("administrator_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Read).HasColumnName("read");
-
-                entity.Property(e => e.ReceptTime)
-                    .HasColumnName("recept_time")
-                    .HasColumnType("TIMESTAMP(6)");
-
-                entity.HasOne(d => d.Administrator)
-                    .WithMany(p => p.FeedbackReception)
-                    .HasForeignKey(d => d.AdministratorId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("SYS_C0010393");
-
-                entity.HasOne(d => d.Feedback)
-                    .WithOne(p => p.FeedbackReception)
-                    .HasForeignKey<FeedbackReception>(d => d.FeedbackId)
-                    .HasConstraintName("SYS_C0010392");
             });
 
             modelBuilder.Entity<GiveAnswer>(entity =>
@@ -527,8 +443,9 @@ namespace StudyPlat.Entities
                     .HasDefaultValueSql("SEQ_MAJOR.nextval");
 
                 entity.Property(e => e.MajorName)
+                    .IsRequired()
                     .HasColumnName("major_name")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
@@ -668,6 +585,7 @@ namespace StudyPlat.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
                     .HasColumnName("phone_number")
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -679,12 +597,40 @@ namespace StudyPlat.Entities
 
                 entity.Property(e => e.UserName)
                     .HasColumnName("user_name")
-                    .HasMaxLength(254)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserType)
                     .HasColumnName("user_type")
                     .HasColumnType("NUMBER(4)");
+            });
+
+            modelBuilder.Entity<UserApproveAnswer>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.AnswerId })
+                    .HasName("SYS_C0010661");
+
+                entity.ToTable("user_approve_answer");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AnswerId)
+                    .HasColumnName("answer_id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Answer)
+                    .WithMany(p => p.UserApproveAnswer)
+                    .HasForeignKey(d => d.AnswerId)
+                    .HasConstraintName("SYS_C0010662");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserApproveAnswer)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("SYS_C0010663");
             });
 
             modelBuilder.HasSequence("SEQ_ANSWER");

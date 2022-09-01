@@ -11,7 +11,7 @@ namespace StudyPlat.Entities
     {
         public string ExpertId { get; set; }
         public string AnswerId { get; set; }
-        public DateTime? AdditionDate { get; set; }
+        public DateTime AdditionDate { get; set; }
 
         public virtual Answer Answer { get; set; }
         public virtual User Expert { get; set; }

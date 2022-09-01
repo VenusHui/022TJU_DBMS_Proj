@@ -649,7 +649,7 @@ namespace StudyPlat.Controllers
             });
         }
         /// <summary>
-        /// 点赞的api，参数:answer_id
+        /// 点赞的api，参数:answer_id,user_id
         /// </summary>
         /// <remarks>
         /// 返回信息示例 :
@@ -661,17 +661,26 @@ namespace StudyPlat.Controllers
         ///     }
         ///     
         /// code对应的情况:
+        /// 1:您已为该答案点过赞
         /// 0:点赞成功
         /// -1:没有对应的答案，请检查answer_id
         /// -2:数据库相关操作有误
         /// </remarks>
         /// <param name="answer_id"></param>
+        /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult ApproveAnswer(string answer_id)
+        public IActionResult ApproveAnswer(string answer_id,string user_id)
         {
             MAnswer mAnswer = new MAnswer(_context);
-            int num = mAnswer.ApproveAnswer(answer_id);
+            int isApproved = mAnswer.IsApproved(user_id, answer_id);
+            if (isApproved != 0)
+                return new JsonResult(new Header
+                {
+                    code = 1,
+                    message = "您已为该答案点过赞"
+                });
+            int num = mAnswer.ApproveAnswer(answer_id,user_id);
             string message;
             if (num == 0)
                 message = "点赞成功";
@@ -708,7 +717,7 @@ namespace StudyPlat.Controllers
         public IActionResult DisApproveAnswer(string answer_id)
         {
             MAnswer mAnswer = new MAnswer(_context);
-            int num = mAnswer.ApproveAnswer(answer_id);
+            int num = mAnswer.DisApproveAnswer(answer_id);
             string message;
             if (num == 0)
                 message = "点踩成功";

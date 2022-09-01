@@ -334,6 +334,54 @@ namespace StudyPlat.Controllers
         }
 
         /// <summary>
+        /// 获取这个用户点赞的答案的IDList，参数:user_id
+        /// </summary>
+        /// <remarks>
+        /// 返回IdList，返回信息示例 :
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "获取该用户点赞的Answer IDList成功"
+        ///         },
+        ///         "data":
+        ///         {
+        ///             "IdList" : ["1"]
+        ///         }
+        ///     }
+        ///  code对应的情况:
+        ///  0:获取该用户点赞的Answer IDList成功
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
+        public IActionResult GetApproveAnswerIDList(string user_id)
+        {
+            lock(obj)
+            {
+                MAnswer mAnswer = new MAnswer(_context);
+                List<string> AnswerIDList = new List<string> { };
+                AnswerIDList = mAnswer.GetApproveIDList(user_id);
+                return new JsonResult(new QueryMessage
+                {
+                    header = new Header
+                    {
+                        code = 0,
+                        message = "获取该用户点赞的Answer IDList成功"
+                    },
+                    data = new QueryData
+                    {
+                        IdList = AnswerIDList
+                    }
+                });
+            }
+        }
+
+
+        /// <summary>
         /// 通过关键字搜索题目，参数:text
         /// </summary>
         /// <remarks>

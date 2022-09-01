@@ -284,6 +284,44 @@ namespace StudyPlat.Models
             }
         }
         
+        public string GetNote(string user_id,string question_id)
+        {
+            IQueryable<CollectionQuestion> collectionQuestions = _context.CollectionQuestion;
+            collectionQuestions = collectionQuestions.Where(u => u.QuestionId == question_id && u.UserId == user_id);
+            int num = collectionQuestions.Count();
+            if (num == 0)
+                return null;//没有对应的收藏项
+            else
+            {
+                string note;
+                CollectionQuestion collection = collectionQuestions.First();
+                note = collection.Note;
+                return note;
+            }
+        }
 
+        public int SetNote(string user_id,string question_id,string note)
+        {
+            IQueryable<CollectionQuestion> collectionQuestions = _context.CollectionQuestion;
+            collectionQuestions = collectionQuestions.Where(u => u.QuestionId == question_id && u.UserId == user_id);
+            int num = collectionQuestions.Count();
+            if (num == 0)
+                return -1;//没有对应的收藏项
+            else
+            {
+                CollectionQuestion collection = collectionQuestions.First();
+                collection.Note = note;
+                try
+                {
+                    _context.Update(collection);
+                    _context.SaveChanges();
+                    return 0;
+                }
+                catch
+                {
+                    return -2;//数据库相关操作出问题
+                }
+            }
+        }
     }
 }

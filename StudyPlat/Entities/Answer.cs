@@ -13,14 +13,15 @@ namespace StudyPlat.Entities
         {
             ExplainQuestion = new HashSet<ExplainQuestion>();
             GiveAnswer = new HashSet<GiveAnswer>();
+            UserApproveAnswer = new HashSet<UserApproveAnswer>();
         }
 
         public string AnswerId { get; set; }
         public string AnswerContent { get; set; }
-        public byte[] AnswerSupplement { get; set; }
-        public decimal? Approve { get; set; }
+        public decimal Approve { get; set; }
 
         public virtual ICollection<ExplainQuestion> ExplainQuestion { get; set; }
         public virtual ICollection<GiveAnswer> GiveAnswer { get; set; }
+        public virtual ICollection<UserApproveAnswer> UserApproveAnswer { get; set; }
     }
 }

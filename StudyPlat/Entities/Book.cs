@@ -20,7 +20,7 @@ namespace StudyPlat.Entities
         public string BookName { get; set; }
         public string Author { get; set; }
         public string Publisher { get; set; }
-        public DateTime? PublishTime { get; set; }
+        public DateTime PublishTime { get; set; }
         public string PicUrl { get; set; }
         public string Comprehension { get; set; }
 

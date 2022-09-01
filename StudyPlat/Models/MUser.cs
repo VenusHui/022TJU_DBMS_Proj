@@ -15,7 +15,6 @@ namespace StudyPlat.Models
             CollectionBook = new HashSet<CollectionBook>();
             CollectionCourse = new HashSet<CollectionCourse>();
             CollectionQuestion = new HashSet<CollectionQuestion>();
-            FeedbackPosting = new HashSet<FeedbackPosting>();
         }
 
         public string GenerateId()

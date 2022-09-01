@@ -154,7 +154,7 @@ namespace StudyPlat.Models
             return expert.UserName;
         }
 
-        public int ApproveAnswer(string answer_id)
+        public int ApproveAnswer(string answer_id,string user_id)
         {
             IQueryable<Answer> answers = _context.Answer;
             answers = answers.Where(u => u.AnswerId == answer_id);
@@ -164,9 +164,15 @@ namespace StudyPlat.Models
             else
             {
                 Answer answer = answers.First();
+                UserApproveAnswer approve = new UserApproveAnswer
+                {
+                    AnswerId = answer_id,
+                    UserId = user_id
+                };
                 answer.Approve++;
                 try
                 {
+                    _context.UserApproveAnswer.Add(approve);
                     _context.Answer.Update(answer);
                     _context.SaveChanges();
                     return 0;
@@ -201,5 +207,25 @@ namespace StudyPlat.Models
                 }
             }
         }
+        public int IsApproved(string user_id, string answer_id)
+        {
+            IQueryable<UserApproveAnswer> userApproveAnswers = _context.UserApproveAnswer;
+            userApproveAnswers = userApproveAnswers.Where(u => u.UserId == user_id && u.AnswerId == answer_id);
+            int num = userApproveAnswers.Count();
+            return num;
+        }
+
+        public List<string> GetApproveIDList(string user_id)
+        {
+            List<string> IDList = new List<string> { };
+            IQueryable<UserApproveAnswer> userApproveAnswers = _context.UserApproveAnswer;
+            userApproveAnswers = userApproveAnswers.Where(u => u.UserId == user_id);
+            foreach(var row in userApproveAnswers)
+            {
+                IDList.Add(row.AnswerId);
+            }
+            return IDList;
+        }
+
     }
 }

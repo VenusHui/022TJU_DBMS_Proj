@@ -290,6 +290,7 @@ namespace StudyPlat.Controllers
         ///         "code" : 0,
         ///         "message" : "取消收藏成功"
         ///     }
+        ///     
         ///  code对应的情况:
         ///  0:取消收藏成功
         ///  -1:取消收藏失败
@@ -318,6 +319,83 @@ namespace StudyPlat.Controllers
                     message = "取消收藏失败"
                 });
             }
+        }
+
+        /// <summary>
+        /// 为指定问题添加笔记的api，参数:user_id,question_id
+        /// 用表单传笔记，key:note
+        /// </summary>
+        ///     
+        ///     Post/sample
+        ///     {
+        ///         "code" : 0,
+        ///         "message" : "添加笔记成功"
+        ///     }
+        ///     
+        ///  code对应的情况:
+        ///  0:添加笔记成功
+        ///  -1:没有对应的收藏项，请检查参数
+        ///  -2:数据库相关操作出现问题，请检查相关代码
+        /// <param name="user_id"></param>
+        /// <param name="question_id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","question_id" })]
+        public IActionResult MakeNoteForQuestion(string user_id,string question_id)
+        {
+            IFormCollection formParams = HttpContext.Request.Form;
+            string note = formParams["note"];
+            MQuestion mQuestion = new MQuestion(_context);
+            int num = mQuestion.SetNote(user_id, question_id, note);
+            string message;
+            if (num == 0)
+                message = "添加笔记成功";
+            else if (num == -1)
+                message = "没有对应的收藏项，请检查参数";
+            else
+                message = "数据库相关操作出现问题，请检查相关代码";
+            return new JsonResult(new Header
+            {
+                code = num,
+                message = message
+            });
+        }
+
+        /// <summary>
+        /// 获取笔记的api，参数:user_id,question_id
+        /// </summary>
+        /// <remarks>
+        ///     
+        ///     Get/sample
+        ///     {
+        ///         "header":
+        ///         {
+        ///             "code" : 0,
+        ///             "message" : "添加笔记成功"
+        ///         },
+        ///         "data":"笔记内容"
+        ///     }
+        ///     
+        ///  code对应的情况:
+        ///  0:获取笔记成功
+        /// </remarks>
+        /// <param name="user_id"></param>
+        /// <param name="question_id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetNoteForQuestion(string user_id,string question_id)
+        {
+            MQuestion mQuestion = new MQuestion(_context);
+            string note = mQuestion.GetNote(user_id, question_id);
+            return new JsonResult(new NoteMessage
+            {
+                header = new Header
+                {
+                    code = 0,
+                    message = "获取笔记成功"
+                },
+                data = note
+            });
         }
     }
 }

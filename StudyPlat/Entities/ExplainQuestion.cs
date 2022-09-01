@@ -11,9 +11,7 @@ namespace StudyPlat.Entities
     {
         public string QuestionId { get; set; }
         public string AnswerId { get; set; }
-        public DateTime? CreateTime { get; set; }
-        public bool? Official { get; set; }
-        public bool? MostCollected { get; set; }
+        public DateTime CreateTime { get; set; }
 
         public virtual Answer Answer { get; set; }
         public virtual Question Question { get; set; }

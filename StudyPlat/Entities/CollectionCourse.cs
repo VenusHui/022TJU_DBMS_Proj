@@ -11,8 +11,7 @@ namespace StudyPlat.Entities
     {
         public string CourseId { get; set; }
         public string UserId { get; set; }
-        public string Note { get; set; }
-        public DateTime? CollectTime { get; set; }
+        public DateTime CollectTime { get; set; }
 
         public virtual Course Course { get; set; }
         public virtual User User { get; set; }

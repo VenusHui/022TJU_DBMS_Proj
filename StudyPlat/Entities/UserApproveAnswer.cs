@@ -7,14 +7,12 @@ using System.Collections.Generic;
 
 namespace StudyPlat.Entities
 {
-    public partial class CollectionQuestion
+    public partial class UserApproveAnswer
     {
-        public string QuestionId { get; set; }
         public string UserId { get; set; }
-        public string Note { get; set; }
-        public DateTime CollectTime { get; set; }
+        public string AnswerId { get; set; }
 
-        public virtual Question Question { get; set; }
+        public virtual Answer Answer { get; set; }
         public virtual User User { get; set; }
     }
 }

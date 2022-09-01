@@ -11,7 +11,6 @@ namespace StudyPlat.Entities
     {
         public string MajorId { get; set; }
         public string CourseId { get; set; }
-        public string Type { get; set; }
 
         public virtual Course Course { get; set; }
         public virtual Major Major { get; set; }
