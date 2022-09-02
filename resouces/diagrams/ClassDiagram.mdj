@@ -16738,6 +16738,34 @@
 					]
 				}
 			]
+		},
+		{
+			"_type": "UMLCollaboration",
+			"_id": "AAAAAAGC8WfKZDBhW14=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Collaboration1",
+			"ownedElements": [
+				{
+					"_type": "UMLActivity",
+					"_id": "AAAAAAGC8WhYSTDo8V0=",
+					"_parent": {
+						"$ref": "AAAAAAGC8WfKZDBhW14="
+					},
+					"name": "Activity1",
+					"ownedElements": [
+						{
+							"_type": "UMLActivityDiagram",
+							"_id": "AAAAAAGC8WhYSTDpQ0I=",
+							"_parent": {
+								"$ref": "AAAAAAGC8WhYSTDo8V0="
+							},
+							"name": "ScanQuestion"
+						}
+					]
+				}
+			]
 		}
 	]
 }

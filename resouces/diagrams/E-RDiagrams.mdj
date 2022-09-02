@@ -1838,12 +1838,12 @@
 										"$ref": "AAAAAAGA29vf33ElYGU="
 									},
 									"font": "Arial;13;0",
-									"left": 398,
-									"top": 416,
+									"left": 447,
+									"top": 391,
 									"width": 122.5478515625,
 									"height": 13,
-									"alpha": 0.11998821850471453,
-									"distance": 142.0211251891774,
+									"alpha": -0.0759406444886137,
+									"distance": 92.26592003551474,
 									"hostEdge": {
 										"$ref": "AAAAAAGA29vf33ElYGU="
 									},
@@ -2068,8 +2068,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 825,
-									"top": 489,
+									"left": 648,
+									"top": 451,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -2085,8 +2085,8 @@
 										"$ref": "AAAAAAGC9EknsqGEcz4="
 									},
 									"font": "Arial;13;0",
-									"left": 552,
-									"top": 480,
+									"left": 402,
+									"top": 378,
 									"width": 89.6162109375,
 									"height": 13,
 									"alpha": 0.08984753164374688,
@@ -2122,7 +2122,7 @@
 								"$ref": "AAAAAAGA0azivNKjOL0="
 							},
 							"lineStyle": 2,
-							"points": "485:496;840:496;840:255",
+							"points": "456:496;456:472;840:472;840:255",
 							"nameLabel": {
 								"$ref": "AAAAAAGC9Ekns6GFmIY="
 							},
@@ -2131,6 +2131,88 @@
 							},
 							"headNameLabel": {
 								"$ref": "AAAAAAGC9Ekns6GHJ78="
+							}
+						},
+						{
+							"_type": "ERDRelationshipView",
+							"_id": "AAAAAAGC+PbDBNY09Pw=",
+							"_parent": {
+								"$ref": "AAAAAAGAzItMRsHIXYA="
+							},
+							"model": {
+								"$ref": "AAAAAAGC+PbDA9YwxHk="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGC+PbDBNY1xaI=",
+									"_parent": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									},
+									"font": "Arial;13;0",
+									"left": 407,
+									"top": 440,
+									"width": 122.1162109375,
+									"height": 13,
+									"alpha": 0.8960547748155439,
+									"distance": 12.806248474865697,
+									"hostEdge": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									},
+									"edgePosition": 1,
+									"text": "question_from_major"
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGC+PbDBNY2mb8=",
+									"_parent": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									},
+									"font": "Arial;13;0",
+									"left": 239,
+									"top": 380,
+									"height": 13,
+									"alpha": 0.5235987755982988,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									},
+									"edgePosition": 2
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGC+PbDBNY3C6U=",
+									"_parent": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									},
+									"font": "Arial;13;0",
+									"left": 681,
+									"top": 455,
+									"height": 13,
+									"alpha": -0.5235987755982988,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGC+PbDBNY09Pw="
+									}
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGA29vf33EiBaE="
+							},
+							"tail": {
+								"$ref": "AAAAAAGA0a0BYNLfjw4="
+							},
+							"lineStyle": 2,
+							"points": "224:361;224:456;696:456;696:436",
+							"nameLabel": {
+								"$ref": "AAAAAAGC+PbDBNY1xaI="
+							},
+							"tailNameLabel": {
+								"$ref": "AAAAAAGC+PbDBNY2mb8="
+							},
+							"headNameLabel": {
+								"$ref": "AAAAAAGC+PbDBNY3C6U="
 							}
 						}
 					]
@@ -2430,6 +2512,36 @@
 								},
 								"reference": {
 									"$ref": "AAAAAAGA0a+Ay9RMqXU="
+								},
+								"cardinality": "0..*"
+							}
+						},
+						{
+							"_type": "ERDRelationship",
+							"_id": "AAAAAAGC+PbDA9YwxHk=",
+							"_parent": {
+								"$ref": "AAAAAAGA0axzG9IJp2E="
+							},
+							"name": "question_from_major",
+							"end1": {
+								"_type": "ERDRelationshipEnd",
+								"_id": "AAAAAAGC+PbDA9YxJr4=",
+								"_parent": {
+									"$ref": "AAAAAAGC+PbDA9YwxHk="
+								},
+								"reference": {
+									"$ref": "AAAAAAGA0axzG9IJp2E="
+								},
+								"cardinality": "0..*"
+							},
+							"end2": {
+								"_type": "ERDRelationshipEnd",
+								"_id": "AAAAAAGC+PbDA9YyvbY=",
+								"_parent": {
+									"$ref": "AAAAAAGC+PbDA9YwxHk="
+								},
+								"reference": {
+									"$ref": "AAAAAAGA29vYjnEK37c="
 								},
 								"cardinality": "0..*"
 							}
@@ -4714,9 +4826,9 @@
 										"$ref": "AAAAAAGA2t+XBbF/X9Q="
 									},
 									"font": "Arial;13;0",
-									"left": 295,
+									"left": 299,
 									"top": 304,
-									"width": 97.576171875,
+									"width": 88.81640625,
 									"height": 13,
 									"autoResize": true,
 									"alpha": 1.3940873545683796,
@@ -4957,9 +5069,9 @@
 										"$ref": "AAAAAAGA2t/InrGaqSg="
 									},
 									"font": "Arial;13;0",
-									"left": 400,
+									"left": 404,
 									"top": 183,
-									"width": 117.7998046875,
+									"width": 108.32275390625,
 									"height": 13,
 									"autoResize": true,
 									"alpha": 1.0222465198500865,
@@ -5068,7 +5180,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 501,
-											"top": 412,
+											"top": 372,
 											"width": 198.8896484375,
 											"height": 13
 										},
@@ -5083,7 +5195,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 501,
-											"top": 427,
+											"top": 387,
 											"width": 198.8896484375,
 											"height": 13
 										},
@@ -5098,7 +5210,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 501,
-											"top": 442,
+											"top": 402,
 											"width": 198.8896484375,
 											"height": 13
 										},
@@ -5113,7 +5225,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 501,
-											"top": 457,
+											"top": 417,
 											"width": 198.8896484375,
 											"height": 13
 										}
@@ -5155,9 +5267,9 @@
 										"$ref": "AAAAAAGA2t/MVrG4QxU="
 									},
 									"font": "Arial;13;0",
-									"left": 415,
+									"left": 421,
 									"top": 272,
-									"width": 128.62890625,
+									"width": 116.2509765625,
 									"height": 13,
 									"autoResize": true,
 									"alpha": -0.8090158010889237,
@@ -5239,9 +5351,9 @@
 										"$ref": "AAAAAAGA2t/MVrG8uhs="
 									},
 									"font": "Arial;13;0",
-									"left": 663,
+									"left": 667,
 									"top": 269,
-									"width": 56.3798828125,
+									"width": 49.8291015625,
 									"height": 13,
 									"autoResize": true,
 									"alpha": -1.5904015660896063,
@@ -5315,7 +5427,7 @@
 							"font": "Arial;13;0",
 							"left": 184,
 							"top": 488,
-							"width": 902.0107421875,
+							"width": 878.7275390625,
 							"height": 25,
 							"autoResize": true,
 							"text": "问题模块：每个问题(question)有对应的书籍(book)以及课程(course)，以及问题的答案(answer)，每个专业(major)有着不同的课程，用户(user)可以收藏问题"
@@ -5363,8 +5475,8 @@
 												"$ref": "AAAAAAGA29vYjnER+IY="
 											},
 											"font": "Arial;13;0",
-											"left": 877,
-											"top": 412,
+											"left": 853,
+											"top": 380,
 											"width": 183.43310546875,
 											"height": 13
 										},
@@ -5378,8 +5490,8 @@
 												"$ref": "AAAAAAGA29vYjnESeu0="
 											},
 											"font": "Arial;13;0",
-											"left": 877,
-											"top": 427,
+											"left": 853,
+											"top": 395,
 											"width": 183.43310546875,
 											"height": 13
 										}
@@ -5702,7 +5814,7 @@
 										"$ref": "AAAAAAGA3CW9LxJEjdk="
 									},
 									"edgePosition": 2,
-									"text": "collection"
+									"text": "collection_question"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -6362,7 +6474,7 @@
 							"font": "Arial;13;0",
 							"left": 120,
 							"top": 520,
-							"width": 477.3525390625,
+							"width": 461.29931640625,
 							"height": 25,
 							"autoResize": true,
 							"text": "管理员模块：管理员(administrator)处理用户(user)提交的反馈信息(feedback_info)"
@@ -6897,7 +7009,7 @@
 							"font": "Arial;13;0",
 							"left": 128,
 							"top": 448,
-							"width": 568.3271484375,
+							"width": 552.3056640625,
 							"height": 25,
 							"autoResize": true,
 							"text": "回答问题模块：由专家(expert)对问题(question)给出解析(answer)，每个专家有对应的专业(major)"
