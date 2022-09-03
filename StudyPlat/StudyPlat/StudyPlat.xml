@@ -1,0 +1,657 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StudyPlat</name>
+    </assembly>
+    <members>
+        <member name="M:StudyPlat.Controllers.AuthenticateController.LoginGenerateJWT">
+            <summary>
+            登陆用的获取JWT的方式，传参通过表单来传，他们的key分别是:password/phone_number
+            </summary>
+            <remarks>
+            返回信息示例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "登陆成功"
+                    },
+                    "token" : asdsadad.adasdad.asdasdas,
+                    "user":
+                    {
+                        "user_type" : 1,
+                        "user_id":"1"
+                    }
+                }
+            其中，user_type: 1代表用户，2代表专家，3代表管理员
+            code对应的情况:
+            0:登陆成功
+            -1:手机号或密码有误
+            -2：其他原因导致的登陆失败
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.AuthenticateController.RegisterGenerateJWT">
+            <summary>
+            注册，注册成功后返回JWT，当前传参方式使用表单，key: user_name/password/phone_number
+            </summary>
+            <remarks>
+            返回信息示例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "注册成功"
+                    },
+                    "token" : null,
+                    "user":
+                    {
+                        "user_type" : 1,
+                        "user_id":"1"
+                    }
+                }
+            其中，user_type: 1代表用户，2代表专家，3代表管理员
+            code对应的情况:
+            0:登陆成功
+            -1:该手机号已经被注册
+            -2：信息填写不全面，注册失败，请检查
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="T:StudyPlat.Controllers.CollectionController">
+            <summary>
+            这是用于收藏使用的类
+            </summary>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.CollectQuestion(System.String,System.String)">
+            <summary>
+            收藏问题,参数:question_id, user_id
+            </summary>
+            <remarks>
+            header中会返回收藏成功或失败的信息，以收藏成功为例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "题目收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:题目收藏成功
+             1:已收藏该题目
+             -1:已收藏题目数量达到上限，收藏失败
+             -2:没有对应的题目，请检查相应题目id
+            </remarks>
+            <param name="question_id"></param>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.CollectBook(System.String,System.String)">
+            <summary>
+            收藏书本，参数: user_id,isbn
+            </summary>
+            <remarks>
+            header中会返回收藏成功或失败的信息，以收藏成功为例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "书本收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:书本收藏成功
+             1:已收藏该书本
+             -1:已收藏书本数量达到上限，收藏失败
+             -2:没有对应的书本，请检查isbn
+            </remarks>
+            <param name="user_id"></param>
+            <param name="isbn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.CollectCourse(System.String,System.String)">
+            <summary>
+            收藏课程，参数:user_id,course_id
+            </summary>
+            <remarks>
+            header中会返回收藏成功或失败的信息，以收藏成功为例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "课程收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:课程收藏成功
+             1:已收藏该课程
+             -1:已收藏课程数量达到上限，收藏失败
+             -2:没有对应的课程，请检查课程ID
+            </remarks>
+            <param name="user_id"></param>
+            <param name="course_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.DeCollectQuestion(System.String,System.String)">
+            <summary>
+            问题取消收藏,参数:user_id,question_id
+            </summary>
+            <remarks>
+            header中会返回行动是否执行成功的信息，以取消收藏成功为例 :
+                
+                Delete/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "取消收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:取消收藏成功
+             -1:取消收藏失败
+            </remarks>
+            <param name="user_id"></param>
+            <param name="question_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.DeCollectBook(System.String,System.String)">
+            <summary>
+            书本取消收藏，参数:user_id,isbn
+            </summary>
+            <remarks>
+            header中会返回行动是否执行成功的信息，以取消收藏成功为例 :
+                
+                Delete/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "取消收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:取消收藏成功
+             -1:取消收藏失败
+            </remarks>
+            <param name="user_id"></param>
+            <param name="isbn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.CollectionController.DeCollectCourse(System.String,System.String)">
+            <summary>
+            课程取消收藏,参数:user_id,course_id
+            </summary>
+            <remarks>
+            header中会返回行动是否执行成功的信息，以取消收藏成功为例 :
+                
+                Delete/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "取消收藏成功"
+                    },
+                }
+             code对应的情况:
+             0:取消收藏成功
+             -1:取消收藏失败
+            </remarks>
+            <param name="user_id"></param>
+            <param name="course_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.DataController.AddBook">
+            <summary>
+            用于添加Book的api，以表单形式传参
+            key:isbn/book_name/author/publisher/year/month/day/comprehension/pic_url
+            </summary>
+            <remarks>
+            返回信息示例 :
+            
+                Post/Sample
+                {
+                    "code" : 0,
+                    "message" : "保存成功"
+                }
+                
+            code对应情况:
+            0:保存成功
+            -1:isbn码出现重复，请检查数据库内是否已经录入相关内容
+            -2:isbn码/bookName/picUrl未填写，请完善后再次尝试录入书本信息
+            </remarks>
+        </member>
+        <member name="M:StudyPlat.Controllers.DataController.AddQuestion">
+            <summary>
+            用于添加题目的api，用表单来传参
+            key:question_stem/pic_url/course_name/book_name
+            </summary>
+            <remarks>
+            返回信息示例 :
+            
+                Post/Sample
+                {
+                    "code" : 0,
+                    "message" : "保存成功"
+                }
+                
+            code对应情况:
+            0:保存成功
+            -1:question_id出现重复，请检查数据库后再试
+            -2:输入的书籍名称有误，请检查数据库后再试
+            -3:输入的课程名称有误，请检查数据库后再试
+            </remarks>
+        </member>
+        <member name="M:StudyPlat.Controllers.DataController.AddAnswer(System.String,System.String)">
+            <summary>
+            专家回答问题的接口，参数有:question_id/expert_id
+            通过表单传递回答的答案，表单的key是answer_content
+            </summary>
+            <remarks>
+            返回信息示例 :
+            
+                Post/Sample
+                {
+                    "code" : 0,
+                    "message" : "成功回答问题"
+                }
+                
+            code对应情况:
+            0:成功回答问题
+            -1:回答传入的信息有误，可能是传入的question_id或是expert_id为空，或是回答的答案为空
+            -2:这个用户不是专家
+            </remarks>>
+            <param name="question_id"></param>
+            <param name="expert_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.PersonalController.GetPersonalInformation(System.String)">
+            <summary>
+            根据用户ID来获取用户的个人信息，用于个人信息页面，参数:user_id
+            </summary>
+            <remarks>
+            major_name代表major对应的id，返回信息示例 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "个人信息获取成功"
+                    },
+                    "personalInformation":
+                    {
+                        "user_name" : "name",
+                        "school" : "TJU",
+                        "major_name" : "CS"
+                    }
+                }
+             code对应的情况:
+             0:获取个人信息成功
+            </remarks>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.PersonalController.SetPersonalInformation(System.String)">
+            <summary>
+            修改个人信息，参数:user_id,同时使用表单进行个人数据的修改，Key:user_name/school/major_id
+            传递的个人数据分别代表更改后的用户名/学校名称/专业id，其中初步设想是major_id这块的值传入需要做成固定形式
+            防止出现奇怪的专业名，为后续的操作带来麻烦,例如提供一个用户可选的下拉栏，其中内容为各个专业名，用户可以
+            选择相应专业名，然后前端根据选择情况向后端传递对应的major_id，具体实现可以再进行讨论
+            </summary>
+            <remarks>
+            返回修改后的用户信息，返回信息示例 :
+                
+                Post/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "个人信息修改成功"
+                    },
+                    "personalInformation":
+                    {
+                        "user_name" : "name",
+                        "school" : "TJU",
+                        "major_name" : "CS"
+                    }
+                }
+             code对应的情况:
+             0:获取个人信息成功
+            </remarks>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetQuestion(System.String)">
+            <summary>
+            获取特定题目，根据question_id来取回question可能会用到的数据，参数：question_id
+            </summary>
+            <remarks>
+            answer_id_list是一个最多包含5个答案ID的数组
+            pic_url是图片的相应地址，可能为空，此时答案不附图片
+            返回题目信息，返回信息示例 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获取题目信息成功"
+                    },
+                    "data":
+                    {
+                        "pic_url" : "http//:",
+                        "answer_id_list": [""]
+                        "question_stem":"题干信息"
+                    }
+                }
+             code对应的情况:
+             0:获取题目信息成功
+             -1:没有相应题目信息，请检查ID是否出错
+            </remarks>
+            <param name="question_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetAnswer(System.String)">
+            <summary>
+            根据answer_id来获取特定答案，参数:answer_id
+            </summary>
+            <remarks>
+            answer_id_list是一个最多包含5个答案ID的数组
+            pic_url是图片的相应地址，可能为空，此时答案不附图片
+            返回答案信息，返回信息示例 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获取答案信息成功"
+                    },
+                    "data":
+                    {
+                        "answer_content" : "这道题目的解答思路是",
+                        "answer_id": "001"
+                    }
+                }
+             code对应的情况:
+             0:根据答案id获取答案信息成功
+             -1:没有相应的答案信息，请检查ID是否出错
+            </remarks>
+            <param name="answer_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetBook(System.String)">
+            <summary>
+            根据isbn取一个特定的书本信息，参数:isbn
+            </summary>
+            <remarks>
+            返回书籍信息，返回信息示例 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "根据书本id获取书本信息成功"
+                    },
+                    "data":
+                    {
+                        "isbn" : "12346",
+                        "book_name": "高等数学",
+                        "author" :"作者",
+                        "publish_time" : "一个时间戳",
+                        "publisher" : "出版社",
+                        "comprehension" : "简介",
+                        "pic_url": "https//:"
+                    }
+                }
+             code对应的情况:
+             0:根据书本id获取书本信息成功
+             -1:没有相应的书本信息，请检查Isbn是否出错
+            </remarks>
+            <param name="isbn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetCourse(System.String)">
+            <summary>
+            根据course_id来取一个特定的课程，参数:course_id
+            </summary>
+            <remarks>
+            返回课程信息，返回信息示例 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "根据课程id获取课程信息成功"
+                    },
+                    "data":
+                    {
+                        "course_id" : "12346",
+                        "comprehension": "有关计算机硬件的一门课",
+                        "course_name" :"计算机系统结构",
+                        "pic_url" : "https://"
+                    }
+                }
+             code对应的情况:
+             0:根据课程id获取课程信息成功
+             -1:没有相应的课程信息，请检查课程ID是否出错
+             </remarks>
+            <param name="course_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.QueryQuestion(System.String)">
+            <summary>
+            通过关键字搜索题目，参数:text
+            </summary>
+            <remarks>
+            IdList是一个装有相关题目ID的链表
+            返回搜索题目信息，返回信息示例 :
+            
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获取相关题目ID成功"
+                    },
+                    "data":
+                    {
+                        "IdList" : [""],
+                    }
+                }
+             code对应的情况:
+             0:获取相关题目ID成功
+            </remarks>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.QueryBook(System.String)">
+            <summary>
+            通过关键字搜索书籍，参数；text
+            </summary>
+            <remarks>
+            IdList是一个装有相关书籍isbn的链表
+            返回搜索书籍信息，返回信息示例 :
+            
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获取相关书籍isbn码成功"
+                    },
+                    "data":
+                    {
+                        "IdList" : [""],
+                    }
+                }
+             code对应的情况:
+             0:获取相关书籍isbn码成功
+            </remarks>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.QueryCourse(System.String)">
+            <summary>
+            通过关键字搜索相关课程，参数:text
+            </summary>
+            <remarks>
+            IdList是一个装有相关课程id的链表
+            返回搜索课程信息，返回信息示例 :
+            
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获取相关课程ID成功"
+                    },
+                    "data":
+                    {
+                        "IdList" : [""],
+                    }
+                }
+             code对应的情况:
+             0:获取相关课程ID成功
+            </remarks>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.QueryCollectionBook(System.String,System.String)">
+            <summary>
+            用于在收藏夹界面搜索书本用的接口，参数:user_id/text
+            返回符合条件的书本的ISBN的list
+            </summary>
+            <remarks>
+            返回信息实例:
+            
+                Get/Sample:
+                {
+                    "header":
+                    {
+                        "code" = 0,
+                        "message" = "搜索到了该用户收藏书本的ISBN码的List数据"
+                    },
+                    "data":
+                    {
+                        IdList = ["1"]
+                    }
+                }
+                
+            code对应的情况:
+            0:搜索到了该用户收藏书本的ISBN码的List数据
+            -1:参数user_id或text为空,请检查
+            </remarks>>
+            <param name="user_id"></param>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetCollectionQuestion(System.String)">
+            <summary>
+            这是用于获得特定用户当前已收藏所有题目id的api,
+            </summary>
+            <remarks>
+            idArray是一个大小为50的string数组，包含有所有收藏题目的ID信息 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "返回了所有收藏题目的ID信息"
+                    },
+                    "data":
+                    {
+                        "idArray" : [""]
+                    }
+                }
+            </remarks>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetCollectionBook(System.String)">
+            <summary>
+            用于获得收藏书本的所有ID
+            </summary>
+            <remarks>
+            idArray是一个大小为50的string数组，包含有所有收藏书本的信息 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "返回了所有收藏书本的isbn码信息"
+                    },
+                    "data":
+                    {
+                        "idArray" : [""]
+                    }
+                }
+            </remarks>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetCollectionCourse(System.String)">
+            <summary>
+            用于获得收藏课程的所有ID
+            </summary>
+            <remarks>
+            idArray是一个大小为50的string数组，包含有所有课程ID的信息 :
+                
+                Get/sample
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "返回了所有收藏课程的ID信息"
+                    },
+                    "data":
+                    {
+                        "idArray" : [""]
+                    }
+                }
+            </remarks>
+            <param name="user_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StudyPlat.Controllers.QueryController.GetQuestionForExpert(System.String)">
+            <summary>
+            获得专家答题界面所需展现的问题的IDList，参数：expert_id
+            </summary>
+            <remarks>
+            finishedIDList:该专家已回答过的问题的idlist
+            unfinishedIDList:待该专家回答的问题的idList
+            返回信息实例:
+                Get/Sample:
+                {
+                    "header":
+                    {
+                        "code" : 0,
+                        "message" : "获得该专家回答过的题目的IDList和待回答题目IDList"
+                    },
+                    "data":
+                    {
+                        "finishedIDList" : ["1"],
+                        "unfinishedIDList" : ["2","3"]
+                    }
+                }
+            </remarks>>
+            <param name="expert_id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
