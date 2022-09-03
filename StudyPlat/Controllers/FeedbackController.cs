@@ -48,6 +48,7 @@ namespace StudyPlat.Controllers
         /// <param name="feedback_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "feedback_id" })]
         public IActionResult GetFeedBack(string feedback_id)
         {
             lock(obj)
@@ -152,6 +153,7 @@ namespace StudyPlat.Controllers
         /// </remarks>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(NoStore =true)]
         public IActionResult GetFeedbackList()
         {
             lock(obj)
@@ -198,6 +200,7 @@ namespace StudyPlat.Controllers
         /// <param name="feedback_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "feedback_id" })]
         public IActionResult SwitchStatus(string feedback_id)
         {
             MFeedbackInfo mFeedback = new MFeedbackInfo(_context);

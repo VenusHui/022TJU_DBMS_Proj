@@ -52,7 +52,7 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id" })]
+        [ResponseCache(NoStore = true,Location =ResponseCacheLocation.None)]
         public IActionResult GetQuestion(string question_id)
         {
             lock (obj)
@@ -130,7 +130,7 @@ namespace StudyPlat.Controllers
         /// <param name="answer_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "answer_id" })]
+        [ResponseCache(NoStore = true,Location = ResponseCacheLocation.None)]
         public IActionResult GetAnswer([FromQuery] string answer_id)
         {
             lock (obj)
@@ -357,7 +357,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
+        [ResponseCache(NoStore = true)]
         public IActionResult GetApproveAnswerIDList(string user_id)
         {
             lock(obj)
@@ -456,7 +456,7 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "text" })]
+        [ResponseCache(Duration = 5, VaryByQueryKeys = new string[] { "text" })]
         public IActionResult QueryBook([FromQuery] string text)
         {
             lock (obj)
@@ -503,7 +503,7 @@ namespace StudyPlat.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "text" })]
+        [ResponseCache(Duration = 5, VaryByQueryKeys = new string[] { "text" })]
         public IActionResult QueryCourse([FromQuery] string text)
         {
             lock (obj)
@@ -859,6 +859,7 @@ namespace StudyPlat.Controllers
         /// <param name="expert_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(NoStore = true,Location = ResponseCacheLocation.None)]
         public IActionResult GetQuestionForExpert(string expert_id)
         {
             lock (obj)
@@ -909,6 +910,7 @@ namespace StudyPlat.Controllers
         /// </remarks>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(NoStore = true)]
         public IActionResult GetMajorInfo()
         {
             lock (obj)
@@ -960,7 +962,7 @@ namespace StudyPlat.Controllers
         /// <param name="major_name"></param>
         /// <returns></returns>
         [HttpGet]
-        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "major_name" })]
+        [ResponseCache(Duration = 5, VaryByQueryKeys = new string[] { "major_name" })]
         public IActionResult GetCourseByMajor(string major_name)
         {
             lock (obj)

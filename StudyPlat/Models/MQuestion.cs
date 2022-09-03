@@ -323,5 +323,34 @@ namespace StudyPlat.Models
                 }
             }
         }
+
+        public void isHaveAnswer(string answer_id)
+        {
+            IQueryable<ExplainQuestion> explainQuestions = _context.ExplainQuestion;
+            explainQuestions = explainQuestions.Where(u => u.AnswerId == answer_id);
+            int num = explainQuestions.Count();
+            if (num == 0)
+                return ;
+            string question_id = explainQuestions.First().QuestionId;
+            IQueryable<ExplainQuestion> explainQuestions1 = _context.ExplainQuestion;
+            explainQuestions1 = explainQuestions1.Where(u => u.QuestionId == question_id);
+            num = explainQuestions1.Count();
+            if(num == 1)
+            {
+                Question question = this.GetQuestion(question_id);
+                question.Status = false;
+                try
+                {
+                    _context.Update(question);
+                    _context.SaveChanges();
+                    return;
+                }
+                catch
+                {
+                    return;
+                }
+            }
+        }
+
     }
 }

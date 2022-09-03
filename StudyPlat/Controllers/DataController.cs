@@ -208,6 +208,7 @@ namespace StudyPlat.Controllers
         /// <param name="expert_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id","expert_id" })]
         public IActionResult AddAnswer(string question_id,string expert_id)
         {
             MAnswer mAnswer = new MAnswer(_context);
@@ -381,6 +382,7 @@ namespace StudyPlat.Controllers
         /// <param name="major_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "major_id" })]
         public IActionResult DeleteMajor(string major_id)
         {
             MMajor mMajor = new MMajor(_context);
@@ -430,6 +432,7 @@ namespace StudyPlat.Controllers
         /// 
 
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "isbn" })]
         public IActionResult DeleteBook(string isbn)
         {
             MBook mBook = new MBook(_context);
@@ -477,9 +480,12 @@ namespace StudyPlat.Controllers
         /// <param name="answer_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "answer_id" })]
         public IActionResult DeleteAnswer(string answer_id)
         {
+            MQuestion mQuestion = new MQuestion(_context);
             MAnswer mAnswer = new MAnswer(_context);
+            mQuestion.isHaveAnswer(answer_id);
             int num = mAnswer.DeleteAnswer(answer_id);
             string message;
             if(num == 0)
@@ -522,6 +528,7 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id" })]
         public IActionResult DeleteQuestion(string question_id)
         {
             MQuestion mQuestion = new MQuestion(_context);
@@ -563,6 +570,7 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "course_id" })]
         public IActionResult DeleteCourse(string course_id)
         {
             MCourse mCourse = new MCourse(_context);
@@ -670,6 +678,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "answer_id","user_id" })]
         public IActionResult ApproveAnswer(string answer_id,string user_id)
         {
             MAnswer mAnswer = new MAnswer(_context);
@@ -684,43 +693,6 @@ namespace StudyPlat.Controllers
             string message;
             if (num == 0)
                 message = "点赞成功";
-            else if (num == -1)
-                message = "没有对应的答案，请检查answer_id";
-            else
-                message = "数据库相关操作有误";
-            return new JsonResult(new Header
-            {
-                code = num,
-                message = message
-            });
-        }
-        /// <summary>
-        /// 点踩的api，参数:answer_id
-        /// </summary>
-        /// <remarks>
-        /// 返回信息示例 :
-        /// 
-        ///     Post/Sample
-        ///     {
-        ///         "code" : 0,
-        ///         "message" : "点踩成功"
-        ///     }
-        ///     
-        /// code对应的情况:
-        /// 0:点踩成功
-        /// -1:没有对应的答案，请检查answer_id
-        /// -2:数据库相关操作有误
-        /// </remarks>
-        /// <param name="answer_id"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IActionResult DisApproveAnswer(string answer_id)
-        {
-            MAnswer mAnswer = new MAnswer(_context);
-            int num = mAnswer.DisApproveAnswer(answer_id);
-            string message;
-            if (num == 0)
-                message = "点踩成功";
             else if (num == -1)
                 message = "没有对应的答案，请检查answer_id";
             else

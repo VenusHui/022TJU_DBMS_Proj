@@ -47,6 +47,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
         public IActionResult GetPersonalInformation(string user_id)//通过user_id来获得个人信息
         {
             lock(QueryController.obj)
@@ -109,6 +110,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
         public IActionResult SetPersonalInformation(string user_id)//改个人信息
         {
             MUser mUser = new MUser(_context);
@@ -184,6 +186,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id" })]
         public IActionResult UpdatePassword(string user_id)
         {
             MUser mUser = new MUser(_context);

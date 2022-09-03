@@ -149,6 +149,9 @@ namespace StudyPlat.Models
             MUser mUser = new MUser(_context);
             IQueryable<GiveAnswer> giveAnswers = _context.GiveAnswer;
             giveAnswers = giveAnswers.Where(u => u.AnswerId == answer_id);
+            int count = giveAnswers.Count();
+            if (count != 1)
+                return null;
             string expert_id = giveAnswers.First().ExpertId;
             User expert = mUser.findUser(expert_id);
             return expert.UserName;

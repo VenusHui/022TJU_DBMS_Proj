@@ -45,6 +45,7 @@ namespace StudyPlat.Controllers
         /// <param name="user_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "question_id","user_id" })]
         public IActionResult CollectQuestion(string question_id,string user_id)
         {
             MQuestion mQuestion = new MQuestion(_context);
@@ -104,6 +105,7 @@ namespace StudyPlat.Controllers
         /// <param name="isbn"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","isbn" })]
         public IActionResult CollectBook(string user_id,string isbn)
         {
             MBook mBook = new MBook(_context);
@@ -162,6 +164,7 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","course_id" })]
         public IActionResult CollectCourse(string user_id, string course_id)
         {
             MCourse mCourse = new MCourse(_context);
@@ -218,6 +221,7 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","question_id" })]
         public IActionResult DeCollectQuestion(string user_id, string question_id)
         {
             MQuestion mQuestion = new MQuestion(_context);
@@ -258,6 +262,7 @@ namespace StudyPlat.Controllers
         /// <param name="isbn"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","isbn" })]
         public IActionResult DeCollectBook(string user_id,string isbn)
         {
             MBook mBook = new MBook(_context);
@@ -299,6 +304,7 @@ namespace StudyPlat.Controllers
         /// <param name="course_id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","course_id" })]
         public IActionResult DeCollectCourse(string user_id, string course_id)
         {
             MCourse mCourse = new MCourse(_context);
@@ -383,6 +389,7 @@ namespace StudyPlat.Controllers
         /// <param name="question_id"></param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 10, VaryByQueryKeys = new string[] { "user_id","question_id" })]
         public IActionResult GetNoteForQuestion(string user_id,string question_id)
         {
             MQuestion mQuestion = new MQuestion(_context);
